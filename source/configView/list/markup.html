@@ -1,0 +1,6 @@
+<span class="controls__label--list"><%- label %></span>
+<select class="controls__input--list js-<%- key %>">
+  <% options.forEach(function(option){ %>
+    <option value="<%- option.value %>"<%- option.value == value ? ' selected': ''%>><%- option.label %></option>
+  <% }) %>
+</select>

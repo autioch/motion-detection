@@ -1,0 +1,12 @@
+body {
+  margin: 0.5em 0 0 0;
+  background: #000;
+  color: #fff;
+  font: 16px Consolas;
+  @media (max-width: 960px){
+    font-size: 14px;
+  }
+  @media (min-width: 1920px){
+    font-size: 18px;
+  }
+}

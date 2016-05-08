@@ -1,0 +1,24 @@
+.controls__label--boolean {
+  // display: inline-block;
+  // vertical-align: middle;
+
+  &:before{
+    content: '';
+    border: solid 1px #fff;
+    width: 0.75em;
+    height: 0.75em;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    line-height: 0.75em;
+  }
+}
+
+.controls__input--boolean {
+  display: none;
+  &:checked + span{
+    &:before{
+      content: '\2714';
+    }
+  }
+}
