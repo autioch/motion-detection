@@ -1,28 +1,13 @@
-/* global module */
 module.exports = {
-  extends: 'eslint:recommended',
-  parserOptions: {
-    sourceType: 'module'
-  },
-  env: {
-    browser: true
-  },
-  globals: {
-    Promise: 1
-  },
+  extends: 'qb',
   rules: {
-    'no-use-before-define': ['error'],
-    indent: [
-      'error',
-      2
-    ],
-    quotes: [
-      'error',
-      'single'
-    ],
-    semi: [
-      'error',
-      'always'
-    ]
+    // 'id-blacklist': ['off'],
+    // 'no-empty-function': ['off'],
+    // 'no-use-before-define': ['error', {
+    //   'functions': false,
+    //   'variables': true,
+    //   'classes': true
+    // }],
+    // 'no-undefined': ['off'],
   }
 };
