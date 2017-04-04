@@ -1,43 +1,26 @@
-import './index.scss';
-
-// import template from 'lodash.template';
-
-// import markup from './markup.html';
+import tag from 'lean-tag';
 import capitalize from '../../utils/capitalize';
-import delegate from '../../utils/delegate';
+import './index';
 
-const compiledTemplate = template(markup);
+export default function rangeViewFactory(configStore, item) {
+  const valueEl = tag(`span.controls__value--range js-${item.key}-value`);
+  const el = tag('label.controls__item', [
+    tag('div.controls__label--range', [item.label, valueEl]),
+    tag(`input.controls__input--range js-${item.key}`, {
+      type: 'range',
+      min: item.min,
+      max: item.max,
+      value: item.value,
+      onchange(ev) {
+        const { value } = ev.target;
 
-export default function BooleanViewFactory(configStore, item) {
-  const el = document.createElement('label');
-  let valueEl;
-
-  el.classList.add('controls__item');
-  const method = configStore[`set${capitalize(item.key)}`];
-
-  delegate(el, 'change', `.js-${item.key}`, (ev) => {
-    const value = ev.target.value;
-
-    valueEl.textContent = value;
-    method(value);
-  });
-
-  function render() {
-    el.innerHTML = compiledTemplate(item);
-    valueEl = el.querySelector(`.js-${item.key}-value`);
-  }
-
-  function exit() {
-    el.remove();
-  }
-
-  const watchItems = {};
-
-  watchItems[item.key] = render;
+        valueEl.textContent = value;
+        configStore[`set${capitalize(item.key)}`](value);
+      }
+    })
+  ]);
 
   return {
-    el,
-    render,
-    exit
+    el
   };
 }

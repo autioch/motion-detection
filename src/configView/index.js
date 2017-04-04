@@ -1,7 +1,8 @@
+import tag from 'lean-tag';
 import listView from './list';
 import rangeView from './range';
 import booleanView from './boolean';
-import './index.scss';
+import './index';
 
 const views = {
   'boolean': booleanView,
@@ -9,33 +10,11 @@ const views = {
   list: listView
 };
 
-const container = document.querySelector('.js-controls');
+export default function ControlViewFactory(config) {
+  const controls = config.map((item) => views[item.type](config, item));
+  const el = tag('div', controls.map((controlView) => controlView.el));
 
-function toggleWide(width) {
-  const wideVideo = width > window.innerWidth * 0.7;
-
-  document.body.classList[wideVideo ? 'add' : 'remove']('is-wide-video');
-}
-
-function updateControlsView(config) {
-  toggleWide(config.width);
-}
-
-export default function ControlViewFactory(configStore) {
-  configStore.forEach((item) => {
-    const view = views[item.type](configStore, item);
-
-    view.render();
-    container.appendChild(view.el);
-  });
-
-  updateControlsView({
-    width: configStore.getWidth()
-  });
-
-  configStore.onWidth(updateControlsView);
-
-  window.addEventListener('resize', () => {
-    toggleWide(configStore.getWidth());
-  });
+  return {
+    el
+  };
 }

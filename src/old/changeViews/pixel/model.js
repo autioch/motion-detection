@@ -1,7 +1,7 @@
 export default function RectModelFactory() {
-  let quality,
-      pixels,
-      changed;
+  let quality;
+  let pixels;
+  let changed;
 
   function reset() {
     pixels = [];

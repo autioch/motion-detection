@@ -14,6 +14,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.16.1",
+    "lean-tag": "^1.0.0",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.9.1",
     "sass-loader": "^3.2.0",

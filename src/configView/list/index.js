@@ -1,35 +1,25 @@
-// import template from 'lodash.template';
-
-// import markup from './markup.html';
+import tag from 'lean-tag';
 import capitalize from '../../utils/capitalize';
-import delegate from '../../utils/delegate';
-import './index.scss';
+import './index';
 
-const compiledTemplate = template(markup);
+function getOptions(item) {
+  const { value, options } = item;
 
-export default function BooleanViewFactory(configStore, item) {
-  const el = document.createElement('label');
+  return options.map((option) => tag('option', option.label, {
+    value: option.value,
+    selected: option.value === value
+  }));
+}
 
-  el.classList.add('controls__item');
-  const method = configStore[`set${capitalize(item.key)}`];
-
-  delegate(el, 'change', `.js-${item.key}`, (ev) => method(ev.target.value));
-
-  function render() {
-    el.innerHTML = compiledTemplate(item);
-  }
-
-  function exit() {
-    el.remove();
-  }
-
-  const watchItems = {};
-
-  watchItems[item.key] = render;
+export default function listViewFactory(configStore, item) {
+  const el = tag('label.controls__item', [
+    tag('span.controls__label--list', item.label),
+    tag(`select.controls__input--list.js-${item.key}`, getOptions(item), {
+      onchange: (ev) => configStore[`set${capitalize(item.key)}`](ev.target.value)
+    })
+  ]);
 
   return {
-    el,
-    render,
-    exit
+    el
   };
 }

@@ -1,0 +1,1 @@
+export { getUserMedia } from './getUserMedia';

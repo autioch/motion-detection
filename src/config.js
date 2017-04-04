@@ -1,7 +1,5 @@
-import { getData } from './utils/urlHash';
-import objToArray from './utils/objToArray';
+/* eslint no-magic-numbers: 0 */
 import getWidthOption from './utils/getWidthOption';
-import keepInRange from './utils/keepInRange';
 const widthOption = getWidthOption();
 
 const config = {
@@ -10,7 +8,7 @@ const config = {
     type: 'range',
     min: widthOption.min,
     max: widthOption.max,
-    value: widthOption.max
+    value: widthOption.value
   },
   motionDetection: {
     label: 'Enable motion detection',
@@ -56,19 +54,5 @@ const config = {
     value: false
   }
 };
-
-const hashData = getData();
-
-objToArray(config).forEach((item) => {
-  const value = hashData[item.key];
-
-  if (value !== undefined) {
-    if (item.value.type === 'range') {
-      item.value.value = keepInRange(item.value.min, item.value.max, value);
-    } else {
-      item.value.value = value;
-    }
-  }
-});
 
 export default config;
