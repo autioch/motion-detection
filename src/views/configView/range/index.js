@@ -1,12 +1,11 @@
 import tag from 'lean-tag';
-import capitalize from '../../utils/capitalize';
-import './index';
+import './style';
 
 export default function rangeViewFactory(configStore, item) {
   const valueEl = tag(`span.controls__value--range js-${item.key}-value`);
   const el = tag('label.controls__item', [
     tag('div.controls__label--range', [item.label, valueEl]),
-    tag(`input.controls__input--range js-${item.key}`, {
+    tag('input.controls__input--range', {
       type: 'range',
       min: item.min,
       max: item.max,
@@ -15,7 +14,7 @@ export default function rangeViewFactory(configStore, item) {
         const { value } = ev.target;
 
         valueEl.textContent = value;
-        configStore[`set${capitalize(item.key)}`](value);
+        configStore[item.key].value = value;
       }
     })
   ]);

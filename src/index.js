@@ -1,22 +1,16 @@
-import tag from 'lean-tag';
-import { getUserMedia } from './utils';
+import { videoViewFactory, logViewFactory, configViewFactory } from './views';
+import { getUserMedia, setupConfig } from './utils';
 import config from './config';
 
-const ratio = 0.75;
 const container = document.body;
 
-const { width: { value: width } } = config;
+const logView = logViewFactory();
 
-const videoElement = tag('video', {
-  width,
-  height: Math.round(width * ratio)
-});
+setupConfig(config, () => logView.log('change'));
 
-container.appendChild(videoElement);
+const videoView = videoViewFactory(config);
 
-getUserMedia().then((videoStream) => {
-  videoElement.srcObject = videoStream;
-  videoElement.onloadedmetadata = function onloadedmetadata() {
-    videoElement.play();
-  };
-});
+container.appendChild(videoView.el);
+container.appendChild(configViewFactory(config).el);
+
+getUserMedia().then((videoStream) => videoView.play(videoStream));

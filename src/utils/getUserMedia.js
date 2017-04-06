@@ -3,7 +3,7 @@ const mediaConstraints = {
   video: true
 };
 
-function promiseMedia() {
+export default function getUserMedia() {
   if (navigator.mediaDevices.getUserMedia) {
     return navigator.mediaDevices.getUserMedia(mediaConstraints);
   }
@@ -30,12 +30,4 @@ function promiseMedia() {
   }
 
   return Promise.reject(Error('Can not get user media.'));
-}
-
-export function getUserMedia() {
-  return promiseMedia().then((stream) => stream, (err) => {
-    document.body.appendChild(document.createTextNode(`Failed to get media ${err.message}`));
-
-    return Promise.reject(err);
-  });
 }
