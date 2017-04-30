@@ -12,5 +12,6 @@ const videoView = videoViewFactory(config);
 
 container.appendChild(videoView.el);
 container.appendChild(configViewFactory(config).el);
+container.appendChild(logView.el);
 
 getUserMedia().then((videoStream) => videoView.play(videoStream));
