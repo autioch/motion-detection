@@ -1,7 +1,9 @@
 import getUserMedia from './getUserMedia';
-import setupConfig from './setupConfig';
+import debounce from './debounce';
+import getWidthOption from './getWidthOption';
 
 export {
   getUserMedia,
-  setupConfig
+  getWidthOption,
+  debounce
 };

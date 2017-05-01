@@ -23,7 +23,7 @@ module.exports = function configure(setup) {
     output: {},
     resolve: {
       root: [path.join(setup.sourcePath)],
-      extensions: ['', '.js'],
+      extensions: ['', '.js', '.jsx'],
       alias: {}
     },
     module: {

@@ -1,17 +1,18 @@
-import { videoViewFactory, logViewFactory, configViewFactory } from './views';
-import { getUserMedia, setupConfig } from './utils';
-import config from './config';
+import { getUserMedia } from './utils';
+import view from './view';
+import storeFactory from './store';
+import schema from './schema';
 
-const container = document.body;
+Object.keys(schema).forEach((key) => {
+  schema[key].key = key;
+});
 
-const logView = logViewFactory();
+const store = storeFactory(schema);
 
-setupConfig(config, () => logView.log('change'));
+store.subscribe((state) => view(state));
 
-const videoView = videoViewFactory(config);
-
-container.appendChild(videoView.el);
-container.appendChild(configViewFactory(config).el);
-container.appendChild(logView.el);
-
-getUserMedia().then((videoStream) => videoView.play(videoStream));
+getUserMedia().then((videoStream) => store.dispatch(({ source }) => ({
+  source: Object.assign({}, source, {
+    value: videoStream
+  })
+})));

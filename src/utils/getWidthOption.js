@@ -1,23 +1,18 @@
 const scrollWidth = 32;
-const heightRatio = 1.33;
-const widthRatio = 0.75;
 const minWidthRatio = 0.1;
-const valueRatio = 0.5;
+const ratio = 0.75;
 
 export default function getWidthOption() {
   // space for scroll
-  let maxWidth = window.innerWidth - scrollWidth;
-  const maxHeight = maxWidth * widthRatio;
+  let width = window.innerWidth - scrollWidth;
+  const height = window.innerHeight - scrollWidth;
 
-  if (maxHeight > window.innerHeight) {
-    maxWidth = window.innerHeight * heightRatio;
+  if (width > height) {
+    width = height / ratio;
   }
 
-  maxWidth = Math.round(maxWidth);
-
   return {
-    min: Math.round(maxWidth * minWidthRatio),
-    max: maxWidth,
-    value: Math.round(maxWidth * valueRatio)
+    min: Math.round(width * minWidthRatio),
+    max: Math.round(width)
   };
 }

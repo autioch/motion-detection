@@ -52,5 +52,5 @@ module.exports = function server(webpackConfig, setup) {
         });
       });
     })
-    .listen(8080, () => console.log('Localhost   listening on: http://localhost:8080'));
+    .listen(8079, () => console.log('Localhost   listening on: http://localhost:8079'));
 };
