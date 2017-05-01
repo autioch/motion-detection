@@ -4,6 +4,8 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 
+const PORT = 8081;
+
 function sendFile(response, file, filename) {
   if (filename.indexOf('.css') !== -1) {
     response.setHeader('content-type', 'text/css');
@@ -52,5 +54,5 @@ module.exports = function server(webpackConfig, setup) {
         });
       });
     })
-    .listen(8079, () => console.log('Localhost   listening on: http://localhost:8079'));
+    .listen(PORT, () => console.log(`Localhost   listening on: http://localhost:${PORT}`));
 };
