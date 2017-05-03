@@ -54,14 +54,7 @@ export default class AppView extends Component {
 
     return (
       <div className="m-app">
-        <VideoView
-          source={this.state.source}
-          width={this.state.width}
-          height={this.state.height}
-          quality={this.state.quality}
-          timeTolerance ={this.state.timeTolerance}
-          colorTolerance ={this.state.colorTolerance}
-        />
+        <VideoView config={this.state} />
         <ControlsView controls={visibleConfig} values={this.state} onChange={this.onChange}/>
       </div>
     );

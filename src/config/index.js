@@ -5,11 +5,11 @@ const { min, max } = getWidthOption();
 
 schema.width.min = min;
 schema.width.max = max;
-schema.width.value = 320;
+schema.width.value = max;
 
 schema.height.min = min;
 schema.height.max = max;
-schema.height.value = min * 2;
+schema.height.value = max;
 
 Object.keys(schema).forEach((key) => {
   schema[key].key = key;
