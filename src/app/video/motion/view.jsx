@@ -8,5 +8,5 @@ export default function MotionView({ changedData }) {
     width: `${changedData.width}px`
   };
 
-  return (<div style={style}/>);
+  return (<div className="rect-view" style={style}/>);
 }

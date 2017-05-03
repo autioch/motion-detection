@@ -8,9 +8,9 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
-    'id-blacklist': ['off'],
-    'no-undefined': ['off'],
+    // 'id-blacklist': ['off'],
+    // 'no-undefined': ['off'],
     'no-unused-vars': ['error', { 'varsIgnorePattern': 'h' }],
-    'react/jsx-uses-vars': [2]
+    // 'react/jsx-uses-vars': [2]
   }
 };

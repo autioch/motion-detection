@@ -51,7 +51,7 @@ export default {
     type: 'range',
     min: 1,
     max: 10,
-    value: 5
+    value: 1
   },
   compareCanvas: {
     label: 'Show compare canvas',

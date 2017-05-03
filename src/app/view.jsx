@@ -46,7 +46,6 @@ export default class AppView extends Component {
   }
 
   render() {
-    // console.log(this.state);
     const { config } = this.props;
     const visibleConfig = Object
         .keys(this.props.config)
@@ -61,6 +60,7 @@ export default class AppView extends Component {
           height={this.state.height}
           quality={this.state.quality}
           timeTolerance ={this.state.timeTolerance}
+          colorTolerance ={this.state.colorTolerance}
         />
         <ControlsView controls={visibleConfig} values={this.state} onChange={this.onChange}/>
       </div>
