@@ -5,11 +5,13 @@ export default function motionViewFactory() {
   const el = tag('.rect-view');
 
   function update(changedData) {
-    el.style.display = changedData.changed ? 'block' : 'none';
-    el.style.height = `${changedData.height}px`;
-    el.style.width = `${changedData.width}px`;
-    el.style.left = `${changedData.left}px`;
-    el.style.top = `${changedData.top}px`;
+    el.style.cssText = [
+      `display:${changedData.changed ? 'block' : 'none'}`,
+      `height:${changedData.height}px`,
+      `width:${changedData.width}px`,
+      `left:${changedData.left}px`,
+      `top:${changedData.top}px`
+    ].join(';');
   }
 
   return {

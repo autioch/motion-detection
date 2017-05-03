@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
+import { detectorFactory } from 'core';
 import MotionView from './motion/view'; // eslint-disable-line no-unused-vars
-import detectorFactory from 'detection';
 
 export default class VideoView extends Component {
   constructor(props) {
@@ -16,7 +16,6 @@ export default class VideoView extends Component {
   detectMotion() {
     this.rafId = requestAnimationFrame(this.detectMotion);
     this.detector.compareFrame(this.context.video);
-    console.log('detectMotion');
     this.setState({
       forcedUpdate: performance.now()
     });
@@ -31,7 +30,7 @@ export default class VideoView extends Component {
   }
 
   render() {
-    const motionState = this.detector.getState();
+    const changedData = this.detector.getData();
 
     return (
       <div style="position:relative;overflow:hidden">
@@ -44,7 +43,7 @@ export default class VideoView extends Component {
         }}
         onloadedmetadata={(ev) => ev.target.play()}
         />
-        <MotionView isInMotion={motionState.isInMotion} changedData={motionState.changedData} />
+        <MotionView isInMotion={changedData.changed} changedData={changedData} />
       </div>
     );
   }

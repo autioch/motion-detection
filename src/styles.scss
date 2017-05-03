@@ -1,0 +1,18 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: #333;
+}
+
+.app {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.app__video {
+  position: relative;
+  overflow: hidden;
+}

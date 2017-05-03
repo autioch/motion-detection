@@ -2,17 +2,23 @@ import getWidthOption from './getWidthOption';
 import schema from './schema';
 
 const { min, max } = getWidthOption();
+const RATIO = 0.75;
 
 schema.width.min = min;
 schema.width.max = max;
 schema.width.value = max;
-
 schema.height.min = min;
 schema.height.max = max;
-schema.height.value = max;
+schema.height.value = Math.floor(schema.width.value * RATIO);
 
-Object.keys(schema).forEach((key) => {
+const state = Object.keys(schema).reduce((dict, key) => {
   schema[key].key = key;
-});
+  dict[key] = schema[key].value;
 
-export default schema;
+  return dict;
+}, {});
+
+export default {
+  schema,
+  state
+};

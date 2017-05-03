@@ -4,7 +4,8 @@ import './styles';
 export default function MotionView({ isInMotion, changedData }) {
   const style = {
     display: `${isInMotion ? 'block' : 'none'}`,
-    transform: `translate(${changedData.left}px,${changedData.top}px)`,
+    top: `${changedData.top}px`,
+    left: `${changedData.left}px`,
     height: `${changedData.height}px`,
     width: `${changedData.width}px`
   };

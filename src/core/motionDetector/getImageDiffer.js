@@ -13,8 +13,6 @@ export default function getImageDiffer({ quality, colorTolerance }, compareWidth
   let leftCol;
   let rightCol;
   let changed;
-  let col;
-  let row;
 
   function reset() {
     topRow = Infinity;
@@ -28,18 +26,18 @@ export default function getImageDiffer({ quality, colorTolerance }, compareWidth
     return (colorDiff > colorTolerance) || (colorDiff < -colorTolerance);
   }
 
-  function markChange(currentCol, currentRow) {
-    if (currentCol < leftCol) {
-      leftCol = currentCol;
+  function markChange(col, row) {
+    if (col < leftCol) {
+      leftCol = col;
     }
-    if (currentCol > rightCol) {
-      rightCol = currentCol;
+    if (col > rightCol) {
+      rightCol = col;
     }
-    if (currentRow < topRow) {
-      topRow = currentRow;
+    if (row < topRow) {
+      topRow = row;
     }
-    if (currentRow > bottomRow) {
-      bottomRow = currentRow;
+    if (row > bottomRow) {
+      bottomRow = row;
     }
   }
 
@@ -53,9 +51,7 @@ export default function getImageDiffer({ quality, colorTolerance }, compareWidth
       noticeablyDiffers(previousFrame[pixel + BLUE] - currentFrame[pixel + BLUE])
     ) {
         changed = true;
-        col = (pixel % pixelRowSize) / PIXEL;
-        row = Math.floor(pixel / pixelRowSize);
-        markChange(col, row);
+        markChange((pixel % pixelRowSize) / PIXEL, Math.floor(pixel / pixelRowSize));
       }
     }
 

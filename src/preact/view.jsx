@@ -1,8 +1,7 @@
 import { h, Component } from 'preact';
-import getUserMedia from './getUserMedia';
+import { getUserMedia } from 'core';
 import ControlsView from './controls/view';
 import VideoView from './video/view';
-import './styles';
 
 const ratio = 0.75;
 
@@ -53,7 +52,7 @@ export default class AppView extends Component {
         .map((key) => config[key]);
 
     return (
-      <div className="m-app">
+      <div className="app">
         <VideoView config={this.state} />
         <ControlsView controls={visibleConfig} values={this.state} onChange={this.onChange}/>
       </div>

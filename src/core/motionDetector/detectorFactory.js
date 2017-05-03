@@ -31,7 +31,6 @@ export default function detectorFactory(initialConfig = {}) {
   function compareFrame(video) {
     const newFrame = getFrame(video);
     const changedData = diffImage(previousFrame, newFrame);
-
     const currentTime = performance.now();
 
     if (changedData.changed) {
@@ -49,7 +48,7 @@ export default function detectorFactory(initialConfig = {}) {
     previousFrame = newFrame;
     state.changedData = changedData;
 
-    return state;
+    return changedData;
   }
 
   updateConfig(initialConfig);
@@ -59,6 +58,7 @@ export default function detectorFactory(initialConfig = {}) {
   return {
     updateConfig,
     compareFrame,
-    getState: () => state
+    getCanvas: () => compareCanvas,
+    getData: () => state.changedData
   };
 }
