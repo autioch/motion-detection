@@ -1,6 +1,7 @@
 import { screenshot } from 'utils';
 import tag from 'lean-tag';
 import motionViewFactory from './motion/view';
+import fpsViewFactory from './fps';
 import './styles';
 
 export default function videoView(detector, videoStream) {
@@ -15,9 +16,13 @@ export default function videoView(detector, videoStream) {
     srcObject: videoStream
   });
 
-  const el = tag('.app-video', [videoEl, screenshotEl]);
+  const fpsView = fpsViewFactory();
+
+  const el = tag('.app-video', [videoEl, fpsView.el, screenshotEl]);
 
   function updateMotion() { // eslint-disable-line consistent-return
+    fpsView.update();
+
     if (!detector.getConfig().motionDetection) {
       return motionView.hide();
     }

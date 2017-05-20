@@ -41,8 +41,8 @@ export default {
     label: 'Comparison inaccuracy',
     type: 'range',
     min: 1,
-    max: 10,
-    value: 5
+    max: 20,
+    value: 10
   },
   colorTolerance: {
     label: 'Color noise tolerance',
