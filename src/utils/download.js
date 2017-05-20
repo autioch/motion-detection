@@ -2,7 +2,7 @@ const windowURL = window.URL || window.webkitURL;
 
 const downloadSupport = typeof document.createElement('a').download !== 'undefined';
 const msBlobSupport = typeof window.navigator.msSaveBlob !== 'undefined';
-const urlDecayTimeout = 1000;
+const urlDecayTimeout = 5000;
 
 function downloadMsBlob(blob, filename) {
   window.navigator.msSaveBlob(blob, filename);

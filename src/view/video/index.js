@@ -1,14 +1,23 @@
-import { screenshot } from 'utils';
+import { screenshot, interval } from 'utils';
 import tag from 'lean-tag';
 import motionViewFactory from './motion/view';
 import fpsViewFactory from './fps';
+import recorderFactory from './recorder';
 import './styles';
 
 export default function videoView(detector, videoStream) {
   let motionView;
+  let record = false;
+
+  function takePrintscreen() {
+    const serializedDate = new Date().toJSON();
+    const timestamp = serializedDate.replace('T', ' ').replace('Z', '');
+
+    screenshot(detector.compareCanvas, `motion\\screenshot-${timestamp}.png`);
+  }
 
   const screenshotEl = tag('button.app-video__screeenshot', 'Screenshot', {
-    onclick: () => screenshot(detector.compareCanvas)
+    onclick: takePrintscreen
   });
 
   const videoEl = tag('video.app-video__display', {
@@ -17,20 +26,31 @@ export default function videoView(detector, videoStream) {
   });
 
   const fpsView = fpsViewFactory();
+  const recorder = recorderFactory(videoStream, detector.getConfig().recordTolerance);
 
-  const el = tag('.app-video', [videoEl, fpsView.el, screenshotEl]);
+  const el = tag('.app-video', [videoEl, fpsView.el, recorder.el, screenshotEl]);
 
-  function updateMotion() { // eslint-disable-line consistent-return
+  function updateMotion() {
     fpsView.update();
 
     if (!detector.getConfig().motionDetection) {
-      return motionView.hide();
+      recorder.stopRecording();
+      motionView.hide();
+
+      return;
     }
 
     const { changedData, isInMotion } = detector.compareFrame(videoEl);
 
     if (!isInMotion) {
-      return motionView.hide();
+      recorder.stopRecording();
+      motionView.hide();
+
+      return;
+    }
+
+    if (record) {
+      recorder.startRecording();
     }
 
     if (changedData.changed) {
@@ -39,7 +59,9 @@ export default function videoView(detector, videoStream) {
   }
 
   function updateConfig() {
-    const { width, color, height, differ, quality } = detector.getConfig();
+    const { width, color, height, differ, quality, recordMotion } = detector.getConfig();
+
+    record = recordMotion;
 
     el.style.width = `${width}px`;
 
@@ -55,10 +77,10 @@ export default function videoView(detector, videoStream) {
   }
 
   updateConfig();
+  interval(updateMotion);
 
   return {
     el,
-    updateConfig,
-    updateMotion
+    updateConfig
   };
 }

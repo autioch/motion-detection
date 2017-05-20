@@ -2,6 +2,8 @@ import imageDifferFactory from './imageDiffer';
 import getInitialState from './getInitialState';
 import getInitialConfig from './getInitialConfig';
 
+const RATIO = 0.75;
+
 export default function detectorFactory(initialConfig = {}) {
   const compareCanvas = document.createElement('canvas');
   const compareContext = compareCanvas.getContext('2d');
@@ -14,6 +16,7 @@ export default function detectorFactory(initialConfig = {}) {
 
   function updateConfig(newConfig) {
     Object.assign(config, newConfig);
+    config.height = Math.round(config.width * RATIO);
     compareWidth = Math.floor(config.width / config.quality);
     compareHeight = Math.floor(config.height / config.quality);
     compareCanvas.width = compareWidth;

@@ -63,5 +63,17 @@ export default {
     type: 'boolean',
     value: false,
     hidden: true
+  },
+  recordMotion: {
+    label: 'Record motion',
+    type: 'boolean',
+    value: false
+  },
+  recordTolerance: {
+    label: 'Record pause tolerance',
+    type: 'range',
+    min: 1,
+    max: 20,
+    value: 5
   }
 };
