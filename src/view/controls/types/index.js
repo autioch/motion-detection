@@ -8,6 +8,6 @@ const types = {
   list: ListView
 };
 
-export default function ControlFactory(control) {
-  return types[control.type];
+export default function controlFactory(control, onChange) {
+  return types[control.type](control, onChange);
 }

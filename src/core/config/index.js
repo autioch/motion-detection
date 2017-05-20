@@ -11,14 +11,14 @@ schema.height.min = min;
 schema.height.max = max;
 schema.height.value = Math.floor(schema.width.value * RATIO);
 
-const state = Object.keys(schema).reduce((dict, key) => {
+const config = Object.keys(schema).reduce((dict, key) => {
   schema[key].key = key;
   dict[key] = schema[key].value;
 
   return dict;
 }, {});
 
-export default {
+export {
   schema,
-  state
+  config
 };

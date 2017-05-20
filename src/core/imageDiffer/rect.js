@@ -5,7 +5,7 @@ const PIXEL = 4;
 const BLUE = 2;
 const GREEN = 1;
 
-export default function getImageDiffer({ quality, colorTolerance }, compareWidth, compareHeight) {
+export default function getRectImageDiffer({ quality, colorTolerance }, compareWidth, compareHeight) {
   const pixelRowSize = compareWidth * PIXEL;
   const pixelCount = pixelRowSize * compareHeight;
   let topRow;

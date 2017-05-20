@@ -20,8 +20,8 @@ export default {
     type: 'boolean',
     value: true
   },
-  marker: {
-    label: 'Marker type',
+  differ: {
+    label: 'Differ type',
     type: 'list',
     value: 1,
     options: [{
@@ -57,11 +57,12 @@ export default {
     label: 'Show compare canvas',
     type: 'boolean',
     value: false
-  },
-  source: {
-    label: 'Video source',
-    type: null,
-    value: null,
-    hidden: true
   }
+
+  // source: {
+  //   label: 'Video source',
+  //   type: null,
+  //   value: null,
+  //   hidden: true
+  // }
 };

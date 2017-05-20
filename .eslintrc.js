@@ -1,16 +1,15 @@
 module.exports = {
   'extends': 'qb',
+  root: true,
   parserOptions: {
     ecmaFeatures: {
-      jsx: true,
-      experimentalObjectRestSpread: true
+      // jsx: true
     }
   },
-  plugins: ['react'],
+  // plugins: ['react'],
   rules: {
-    // 'id-blacklist': ['off'],
-    // 'no-undefined': ['off'],
-    'no-unused-vars': ['error', { 'varsIgnorePattern': 'h' }],
+    // 'id-length': ['error', {min: 2, exceptions: ['h']}],
+    // 'no-unused-vars': ['error', { 'varsIgnorePattern': 'h' }],
     // 'react/jsx-uses-vars': [2]
   }
 };
