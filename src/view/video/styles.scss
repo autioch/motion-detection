@@ -1,7 +1,8 @@
 .app-video {
   position: relative;
   overflow: hidden;
-  display: inline-block;
+  z-index: 1;
+  margin: 0 auto;
 }
 
 .rect-view {
@@ -9,7 +10,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  transition: all 100ms;
+  transition: all 50ms;
+  z-index: 1;
 }
 
 .app-video__display {
@@ -27,4 +29,5 @@
   outline: 0;
   cursor: pointer;
   letter-spacing: 1px;
+  z-index: 2;
 }

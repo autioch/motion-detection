@@ -56,13 +56,7 @@ export default {
   compareCanvas: {
     label: 'Show compare canvas',
     type: 'boolean',
-    value: false
+    value: false,
+    hidden: true
   }
-
-  // source: {
-  //   label: 'Video source',
-  //   type: null,
-  //   value: null,
-  //   hidden: true
-  // }
 };

@@ -48,7 +48,7 @@ export default function detectorFactory(initialConfig = {}) {
     previousFrame = newFrame;
     state.changedData = changedData;
 
-    return changedData;
+    return state;
   }
 
   updateConfig(initialConfig);

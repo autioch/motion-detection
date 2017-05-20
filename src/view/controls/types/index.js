@@ -1,6 +1,7 @@
 import BooleanView from './boolean';
 import ListView from './list';
 import RangeView from './range';
+import './styles';
 
 const types = {
   'boolean': BooleanView,

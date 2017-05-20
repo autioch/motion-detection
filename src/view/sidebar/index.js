@@ -11,7 +11,7 @@ export default function sidebarView(controls, onChange) {
     onclick: toggleExpanded
   });
 
-  const el = tag('.app-controls', [contentEl, toggleEl]);
+  const el = tag('.app-sidebar', [contentEl, toggleEl]);
 
   function toggleExpanded() {
     isExpanded = !isExpanded;
