@@ -5,7 +5,7 @@ module.exports = function output(webpackConfig, setup) {
   Object.assign(webpackConfig.output, {
     path: setup.buildFolder,
     filename: `${setup.assets}[name]${setup.nameSuffix}.js`,
-    publicPath: '/',
+    publicPath: '',
     chunkFilename: `${setup.assets}[name]${setup.nameSuffix}.js`
   });
 
