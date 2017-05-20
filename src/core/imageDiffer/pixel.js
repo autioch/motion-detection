@@ -9,11 +9,9 @@ export default function getPixelImageDiffer({ quality, colorTolerance }, compare
   const pixelRowSize = compareWidth * PIXEL;
   const pixelCount = pixelRowSize * compareHeight;
   let pixels;
-  let changed;
 
   function reset() {
     pixels = [];
-    changed = false;
   }
 
   function noticeablyDiffers(colorDiff) {
@@ -21,7 +19,6 @@ export default function getPixelImageDiffer({ quality, colorTolerance }, compare
   }
 
   function markChange(col, row) {
-    changed = true;
     pixels.push(col * quality, row * quality);
   }
 
@@ -34,11 +31,13 @@ export default function getPixelImageDiffer({ quality, colorTolerance }, compare
       noticeablyDiffers(previousFrame[pixel + GREEN] - currentFrame[pixel + GREEN]) ||
       noticeablyDiffers(previousFrame[pixel + BLUE] - currentFrame[pixel + BLUE])
     ) {
-        changed = true;
         markChange((pixel % pixelRowSize) / PIXEL, Math.floor(pixel / pixelRowSize));
       }
     }
 
-    return pixels;
+    return {
+      changed: pixels.length > 0,
+      pixels
+    };
   };
 }

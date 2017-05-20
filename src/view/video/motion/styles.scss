@@ -1,0 +1,14 @@
+.rect-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 50ms;
+  z-index: 1;
+}
+
+.pixel-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}

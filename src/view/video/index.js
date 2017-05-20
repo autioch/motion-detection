@@ -1,10 +1,10 @@
 import { screenshot } from 'utils';
 import tag from 'lean-tag';
-
+import motionViewFactory from './motion/view';
 import './styles';
 
 export default function videoView(detector, videoStream) {
-  const rectMotionEl = tag('.rect-view');
+  let motionView;
 
   const screenshotEl = tag('button.app-video__screeenshot', 'Screenshot', {
     onclick: () => screenshot(detector.compareCanvas)
@@ -12,51 +12,44 @@ export default function videoView(detector, videoStream) {
 
   const videoEl = tag('video.app-video__display', {
     onloadedmetadata: (ev) => ev.target.play(),
-    srcObject: videoStream,
-    width: detector.getConfig().width,
-    height: detector.getConfig().height
+    srcObject: videoStream
   });
 
-  const el = tag('.app-video', [videoEl, rectMotionEl, screenshotEl], {
-    style: {
-      width: `${detector.getConfig().width}px`
-    }
-  });
+  const el = tag('.app-video', [videoEl, screenshotEl]);
 
-  function updateMotion() {
-    const { motionDetection } = detector.getConfig();
-
-    if (!motionDetection) {
-      rectMotionEl.style.display = 'none';
-
-      return;
+  function updateMotion() { // eslint-disable-line consistent-return
+    if (!detector.getConfig().motionDetection) {
+      return motionView.hide();
     }
 
     const { changedData, isInMotion } = detector.compareFrame(videoEl);
 
-    if (isInMotion) {
-      if (changedData.changed) {
-        rectMotionEl.style.cssText = [
-          `display:block`,
-          `height:${changedData.height}px`,
-          `width:${changedData.width}px`,
-          `left:${changedData.left}px`,
-          `top:${changedData.top}px`
-        ].join(';');
-      }
-    } else {
-      rectMotionEl.style.display = 'none';
+    if (!isInMotion) {
+      return motionView.hide();
+    }
+
+    if (changedData.changed) {
+      motionView.show(changedData);
     }
   }
 
   function updateConfig() {
-    const { width, height } = detector.getConfig();
+    const { width, color, height, differ, quality } = detector.getConfig();
 
     el.style.width = `${width}px`;
 
     videoEl.width = width;
     videoEl.height = height;
+
+    if (motionView) {
+      el.removeChild(motionView.el);
+    }
+
+    motionView = motionViewFactory(differ, color, width, height, quality);
+    el.appendChild(motionView.el);
   }
+
+  updateConfig();
 
   return {
     el,

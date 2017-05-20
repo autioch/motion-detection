@@ -16,14 +16,14 @@ export default {
     hidden: true
   },
   motionDetection: {
-    label: 'Enable motion detection',
+    label: 'Detect motion',
     type: 'boolean',
     value: true
   },
   differ: {
-    label: 'Differ type',
+    label: 'Motion precision',
     type: 'list',
-    value: 1,
+    value: 2,
     options: [{
       value: 1,
       label: 'Rectangle'
@@ -32,26 +32,31 @@ export default {
       label: 'Pixel'
     }]
   },
-  colorTolerance: {
-    label: 'Color difference tolerance',
-    type: 'range',
-    min: 0,
-    max: 255,
-    value: 50
-  },
-  timeTolerance: {
-    label: 'Short term noise tolerance',
-    type: 'range',
-    min: 1,
-    max: 1000,
-    value: 500
+  color: {
+    label: 'Motion color',
+    type: 'color',
+    value: '#00ff00'
   },
   quality: {
-    label: 'Difference simplicity',
+    label: 'Comparison inaccuracy',
     type: 'range',
     min: 1,
     max: 10,
-    value: 1
+    value: 5
+  },
+  colorTolerance: {
+    label: 'Color noise tolerance',
+    type: 'range',
+    min: 0,
+    max: 255,
+    value: 40
+  },
+  timeTolerance: {
+    label: 'Motion pause tolerance',
+    type: 'range',
+    min: 1,
+    max: 1000,
+    value: 300
   },
   compareCanvas: {
     label: 'Show compare canvas',
