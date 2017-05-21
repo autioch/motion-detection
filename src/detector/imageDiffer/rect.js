@@ -41,14 +41,14 @@ export default function getRectImageDiffer({ quality, colorTolerance }, compareW
     }
   }
 
-  return function diffImage(previousFrame, currentFrame) {
+  function diffImage(backgroundFrame, currentFrame) {
     reset();
 
     for (let pixel = 0; pixel < pixelCount; pixel = pixel + PIXEL) {
       if (
-      noticeablyDiffers(previousFrame[pixel] - currentFrame[pixel]) ||
-      noticeablyDiffers(previousFrame[pixel + GREEN] - currentFrame[pixel + GREEN]) ||
-      noticeablyDiffers(previousFrame[pixel + BLUE] - currentFrame[pixel + BLUE])
+      noticeablyDiffers(backgroundFrame[pixel] - currentFrame[pixel]) ||
+      noticeablyDiffers(backgroundFrame[pixel + GREEN] - currentFrame[pixel + GREEN]) ||
+      noticeablyDiffers(backgroundFrame[pixel + BLUE] - currentFrame[pixel + BLUE])
     ) {
         changed = true;
         markChange((pixel % pixelRowSize) / PIXEL, Math.floor(pixel / pixelRowSize));
@@ -62,5 +62,17 @@ export default function getRectImageDiffer({ quality, colorTolerance }, compareW
       width: (rightCol - leftCol) * quality,
       changed
     };
+  }
+
+  function diffsEqual(diff1, diff2) {
+    return (diff1.top === diff2.top) &&
+          (diff1.left === diff2.left) &&
+          (diff1.height === diff2.height) &&
+          (diff1.width === diff2.width);
+  }
+
+  return {
+    diffImage,
+    diffsEqual
   };
 }

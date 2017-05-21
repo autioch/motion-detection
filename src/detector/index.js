@@ -9,10 +9,11 @@ export default function detectorFactory(initialConfig = {}) {
   const compareContext = compareCanvas.getContext('2d');
   const state = getInitialState();
   const config = getInitialConfig();
-  let previousFrame;
-  let diffImage;
+  let backgroundFrame;
+  let imageDiffer;
   let compareWidth;
   let compareHeight;
+  let staticFrames = 0;
 
   function updateConfig(newConfig) {
     Object.assign(config, newConfig);
@@ -21,7 +22,10 @@ export default function detectorFactory(initialConfig = {}) {
     compareHeight = Math.floor(config.height / config.quality);
     compareCanvas.width = compareWidth;
     compareCanvas.height = compareHeight;
-    diffImage = imageDifferFactory(config, compareWidth, compareHeight, config.differ);
+    backgroundFrame = null;
+    state.changedData = {};
+    staticFrames = 0;
+    imageDiffer = imageDifferFactory(config, compareWidth, compareHeight, config.differ);
   }
 
   function getFrame(video) {
@@ -31,9 +35,19 @@ export default function detectorFactory(initialConfig = {}) {
     return compareContext.getImageData(0, 0, compareWidth, compareHeight).data;
   }
 
+  function setBackgroundFrame(video) {
+    backgroundFrame = getFrame(video);
+  }
+
   function compareFrame(video) {
     const newFrame = getFrame(video);
-    const changedData = diffImage(previousFrame, newFrame);
+
+    if (!backgroundFrame) {
+      backgroundFrame = newFrame;
+
+      return state;
+    }
+    const changedData = imageDiffer.diffImage(backgroundFrame, newFrame);
     const currentTime = performance.now();
 
     if (changedData.changed) {
@@ -48,7 +62,21 @@ export default function detectorFactory(initialConfig = {}) {
       state.isInMotion = false;
     }
 
-    previousFrame = newFrame;
+    if (config.background == 1) {
+      backgroundFrame = newFrame;
+    }
+
+    if (config.background == 3) {
+      if (imageDiffer.diffsEqual(state.changedData, changedData)) {
+        if (staticFrames > 5) {
+          staticFrames = 0;
+          backgroundFrame = newFrame;
+        }
+      } else {
+        staticFrames = 0;
+      }
+    }
+
     state.changedData = changedData;
 
     return state;
@@ -56,12 +84,11 @@ export default function detectorFactory(initialConfig = {}) {
 
   updateConfig(initialConfig);
 
-  previousFrame = compareContext.getImageData(0, 0, compareWidth, compareHeight).data;
-
   return {
     updateConfig,
     compareFrame,
     compareCanvas,
+    setBackgroundFrame,
     getState: () => state,
     getConfig: () => config
   };

@@ -37,6 +37,21 @@ export default {
     type: 'color',
     value: '#00ff00'
   },
+  background: {
+    label: 'Compare style',
+    type: 'list',
+    value: 1,
+    options: [{
+      value: 1,
+      label: 'Previous frame'
+    }, {
+      value: 2,
+      label: 'First frame'
+    }, {
+      value: 3,
+      label: 'Last static frame'
+    }]
+  },
   quality: {
     label: 'Comparison inaccuracy',
     type: 'range',
