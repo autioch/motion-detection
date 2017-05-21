@@ -40,13 +40,13 @@ export default {
   background: {
     label: 'Compare style',
     type: 'list',
-    value: 1,
+    value: 2,
     options: [{
       value: 1,
       label: 'Previous frame'
     }, {
       value: 2,
-      label: 'First frame'
+      label: 'Background frame'
     }, {
       value: 3,
       label: 'Last static frame'

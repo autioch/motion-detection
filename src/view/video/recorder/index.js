@@ -47,6 +47,7 @@ export default function recorderFactory(stream, recordTolerance) {
   }
 
   function realStopRecording() {
+    stopTimeout = null;
     if (recorder && recorder.state === 'recording') {
       el.textContent = 'Recording stopped.';
       recorder.stop();
@@ -54,7 +55,10 @@ export default function recorderFactory(stream, recordTolerance) {
     }
   }
 
-  function stopRecording() {
+  function stopRecording(immediate) {
+    if (immediate) {
+      realStopRecording();
+    }
     if (stopTimeout || !recorder || recorder.state !== 'recording') {
       return;
     }

@@ -8,17 +8,3 @@
 .app-video__display {
   display: block;
 }
-
-.app-video__screeenshot {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  line-height: 2em;
-  padding: 0 1em;
-  border: solid 1px transparent;
-  background: rgba(255, 255, 255, .5);
-  outline: 0;
-  cursor: pointer;
-  letter-spacing: 1px;
-  z-index: 2;
-}
