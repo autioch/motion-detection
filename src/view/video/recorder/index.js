@@ -5,7 +5,7 @@ import './styles';
 const MILISECOND = 1000;
 
 export default function recorderFactory(stream, recordTolerance) {
-  const el = tag('.recorder');
+  const el = tag('.recorder.app-video__overlay');
   let recorder;
   let chunks = [];
   let motionStart;

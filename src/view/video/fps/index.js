@@ -7,7 +7,7 @@ export default function rectMotionView() {
   let lastRender = Date.now();
   let fps = 0;
 
-  const el = tag('.video-fps');
+  const el = tag('.video-fps.app-video__overlay');
 
   function update() {
     const currentRender = Date.now();

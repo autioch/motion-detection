@@ -10,7 +10,7 @@ function getFilename() {
 }
 
 export default function screenshotView(detector) {
-  const el = tag('button.app-video__screeenshot', 'Screenshot', {
+  const el = tag('button.app-video__screeenshot.app-video__overlay', 'Screenshot', {
     onclick: () => screenshot(detector.compareCanvas, getFilename())
   });
 

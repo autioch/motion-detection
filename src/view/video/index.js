@@ -75,6 +75,12 @@ export default function videoView(detector, videoStream) {
       el.removeChild(motionView.el);
     }
 
+    if (record) {
+      el.appendChild(recorder.el);
+    } else {
+      recorder.el.parentNode && el.removeChild(recorder.el);
+    }
+
     if (background == 2) {
       el.appendChild(backgroundFrameView.el);
     } else {
