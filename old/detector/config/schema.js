@@ -1,5 +1,5 @@
 /* eslint no-magic-numbers: 0 */
-export default {
+const schema = {
   width: {
     label: 'Video width',
     type: 'range',
@@ -92,3 +92,5 @@ export default {
     value: 5
   }
 };
+
+export default schema;
