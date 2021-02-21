@@ -1,6 +1,6 @@
-import Controls from './controls';
-import ErrorLog from './errorLog';
-import Sidebar from './sidebar';
+import Controls from './components/controls';
+import ErrorLog from './components/errorLog';
+import Sidebar from './components/sidebar';
 import schema from './schema';
 import './App.scss';
 

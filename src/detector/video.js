@@ -1,5 +1,4 @@
 /* eslint no-use-before-define: 0 */
-import { interval } from 'utils';
 import tag from 'lean-tag';
 import motionViewFactory from './motion/view';
 import fpsViewFactory from './fps';
@@ -7,6 +6,25 @@ import recorderFactory from './recorder';
 import screenshotViewFactory from './screenshot';
 import backgroundFrameViewFactory from './backgroundFrame';
 import './styles';
+
+function interval(callback) {
+  let rafId = requestAnimationFrame(callback);
+
+  function cancel() {
+    cancelAnimationFrame(rafId);
+  }
+
+  function loop() {
+    rafId = requestAnimationFrame(loop);
+    callback();
+  }
+
+  loop();
+
+  return {
+    cancel
+  };
+}
 
 export default function videoView(detector, videoStream) {
   let motionView;
