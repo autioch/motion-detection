@@ -2,7 +2,6 @@ import Controls from './components/controls';
 import ErrorLog from './components/errorLog';
 import Sidebar from './components/sidebar';
 import Video from './components/video';
-import schema from './detector/schema';
 import './App.scss';
 
 function App() {
@@ -10,7 +9,7 @@ function App() {
     <div className="App">
       <ErrorLog/>
       <Sidebar>
-        <Controls schema={schema} />
+        <Controls />
       </Sidebar>
       <Video />
     </div>

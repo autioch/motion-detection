@@ -1,12 +1,18 @@
 import {
-  DATA_SET
+  TAKE_SCREENSHOT,
+  SET_BACKGROUND_FRAME
 } from './actionTypes';
 
-export function actionDataSet(data) {
+export function takeScreenshort() {
   return {
-    type: DATA_SET,
-    payload: {
-      data
-    }
+    type: TAKE_SCREENSHOT,
+    payload: {}
+  };
+}
+
+export function setBackgroundFrame() {
+  return {
+    type: SET_BACKGROUND_FRAME,
+    payload: {}
   };
 }

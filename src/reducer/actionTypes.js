@@ -1,1 +1,2 @@
-export const DATA_SET = 'DATA_SET';
+export const TAKE_SCREENSHOT = 'TAKE_SCREENSHOT';
+export const SET_BACKGROUND_FRAME = 'SET_BACKGROUND_FRAME';

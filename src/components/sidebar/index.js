@@ -14,7 +14,7 @@ export default function Sidebar({ children }) {
 
   return (
     <>
-      <Button type="primary" onClick={showDrawer}>Open</Button>
+      <Button type="primary" onClick={showDrawer}>Settings</Button>
       <Drawer
         title="Settings"
         placement="left"

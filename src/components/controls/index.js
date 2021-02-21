@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars, no-empty-function */
 import { Switch, Slider, Select } from 'antd';
+import { useStore } from '../../store';
 
 const { Option } = Select; // eslint-disable-line no-shadow
 
@@ -47,7 +48,9 @@ function Item({ id, control }) {
   );
 }
 
-export default function Controls({ schema }) {
+export default function Controls() {
+  const [state] = useStore();
+  const { schema } = state;
   const controls = Object.entries(schema);
 
   return (

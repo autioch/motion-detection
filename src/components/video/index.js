@@ -1,6 +1,6 @@
 import { Button } from 'antd';
-import downloadScreenshot from '../../detector/downloadScreenshot';
-import setBackgroundFrame from '../../detector/setBackgroundFrame';
+import { takeScreenshort, setBackgroundFrame } from '../../reducer';
+import { useStore } from '../../store';
 
 // possible states:
 // - filenme downloaded
@@ -9,10 +9,16 @@ import setBackgroundFrame from '../../detector/setBackgroundFrame';
 // el.textContent = 'Recording waiting...';
 
 export default function Video({ recorderState = '', fps = 0 }) {
+  const [, dispatch] = useStore();
+
   return (
     <div>
-      <Button className="app-video__background-frame" onClick={setBackgroundFrame}>Set background frame</Button>
-      <Button className="app-video__screeenshot" onClick={downloadScreenshot}>Screenshot</Button>
+      <Button className="app-video__background-frame" onClick={() => dispatch(setBackgroundFrame())}>
+        Set background frame
+      </Button>
+      <Button className="app-video__screeenshot" onClick={() => dispatch(takeScreenshort())}>
+      Screenshot
+      </Button>
       <div className="video-fps">{fps}</div>
       <div className="recorder">{recorderState}</div>
     </div>
