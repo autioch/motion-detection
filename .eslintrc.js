@@ -1,9 +1,10 @@
 module.exports = {
-  "extends": [
-    "react-app",
-    "qb"
+  'extends': [
+    'react-app',
+    'qb'
   ],
   root: true,
+
   // plugins: ['react'],
   parserOptions: {
     ecmaVersion: 2017,
@@ -20,10 +21,9 @@ module.exports = {
     'id-length': ['off'],
     'no-undefined': ['off'],
     'no-underscore-dangle': ['off'],
-    'class-methods-use-this': ['off'],
+    'class-methods-use-this': ['off']
   }
 };
-
 
 // module.exports = {
 //   "extends": [

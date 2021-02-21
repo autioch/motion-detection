@@ -1,0 +1,39 @@
+.app-video__background-frame {
+  top: 3em;
+  right: 1em;
+  border: 0;
+  cursor: pointer;
+}
+
+.app-video__screeenshot {
+  top: 1em;
+  right: 1em;
+  border: 0;
+  cursor: pointer;
+}
+
+.video-fps {
+  bottom: 1em;
+  right: 1em;
+}
+
+// .app-video {
+//   position: relative;
+//   overflow: hidden;
+//   z-index: 1;
+//   margin: 0 auto;
+// }
+//
+// .app-video__display {
+//   display: block;
+// }
+//
+// .app-video__overlay {
+//   background: rgba(255, 255, 255 , 0.3);
+//   position: absolute;
+//   letter-spacing: 1px;
+//   padding: .25em .5em;
+//   outline: 0;
+//   z-index: 2;
+//   font-size: .9em;
+// }
