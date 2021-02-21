@@ -9,10 +9,15 @@ export default function detectorFactory(initialConfig = {}) {
   const compareContext = compareCanvas.getContext('2d');
   const state = getInitialState();
   const config = getInitialConfig();
+
   let backgroundFrame;
+
   let imageDiffer;
+
   let compareWidth;
+
   let compareHeight;
+
   let staticFrames = 0;
 
   function updateConfig(newConfig) {

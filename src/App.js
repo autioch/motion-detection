@@ -1,7 +1,8 @@
 import Controls from './components/controls';
 import ErrorLog from './components/errorLog';
 import Sidebar from './components/sidebar';
-import schema from './schema';
+import Video from './components/video';
+import schema from './detector/schema';
 import './App.scss';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <Sidebar>
         <Controls schema={schema} />
       </Sidebar>
+      <Video />
     </div>
   );
 }

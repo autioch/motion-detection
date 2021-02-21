@@ -1,4 +1,4 @@
-import { download } from 'utils';
+import download from './download';
 
 export default function downloadScreenshot(canvas) {
   const serializedDate = new Date().toJSON();

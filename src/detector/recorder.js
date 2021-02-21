@@ -1,4 +1,4 @@
-import { download } from 'utils';
+import download from './download';
 
 const MILISECOND = 1000;
 
