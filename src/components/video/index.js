@@ -1,6 +1,7 @@
 import { Button } from 'antd';
 import { takeScreenshort, setBackgroundFrame } from '../../reducer';
 import { useStore } from '../../store';
+import { useEffect, useRef } from 'react';
 
 // possible states:
 // - filenme downloaded
@@ -8,8 +9,17 @@ import { useStore } from '../../store';
 // el.textContent = 'Recording stopped.';
 // el.textContent = 'Recording waiting...';
 
-export default function Video({ recorderState = '', fps = 0 }) {
+const startPlaying = (ev) => ev.target.play();
+
+export default function Video({ videoStream, width, height, recorderState = '', fps = 0 }) {
   const [, dispatch] = useStore();
+  const refVideo = useRef(null);
+
+  useEffect(() => {
+    if (refVideo.current) {
+      refVideo.current.srcObject = videoStream;
+    }
+  }, [videoStream]);
 
   return (
     <div>
@@ -21,6 +31,14 @@ export default function Video({ recorderState = '', fps = 0 }) {
       </Button>
       <div className="video-fps">{fps}</div>
       <div className="recorder">{recorderState}</div>
+      <video
+        ref={refVideo}
+        className="app-video__display"
+        onLoadedMetadata={startPlaying}
+        srcObject={videoStream}
+        width={width}
+        height={height}
+      />
     </div>
   );
 }

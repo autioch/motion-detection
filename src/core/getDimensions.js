@@ -14,11 +14,14 @@ export default function getDimensions() {
     height = Math.round(width * RATIO);
   }
 
+  const minWidth = Math.round(width * MIN_RATIO);
+  const minHeight = Math.round(height * MIN_RATIO);
+
   return {
-    minWidth: Math.round(width * MIN_RATIO),
+    minWidth,
     maxWidth: width,
     width,
-    minHeight: Math.round(height * MIN_RATIO),
+    minHeight,
     maxHeight: height,
     height
   };

@@ -26,7 +26,7 @@ if (navigator.mediaDevices.getUserMedia === undefined) {
 
 export default function getUserMedia() {
   return navigator.mediaDevices.getUserMedia({
-    audio: true,
+    audio: false,
     video: true
   });
 }

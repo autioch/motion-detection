@@ -1,19 +1,8 @@
-import download from './download';
+import donwloadWebmVideo from './donwloadWebmVideo';
 
 const MILISECOND = 1000;
 
-function realDownload(chunks, startDateTime, stopDateTime) {
-  const downloadData = new Blob(chunks, {
-    type: 'video/webm'
-  });
-
-  const duration = Math.round((stopDateTime.getTime() - startDateTime.getTime()) / MILISECOND);
-  const fileName = `motion ${startDateTime.toLocaleString()}  ${duration}s.webm`;
-
-  download(downloadData, fileName);
-}
-
-export default function recorderFactory(stream, recordTolerance = 0) {
+export default function getStreamRecorder(stream, recordTolerance = 0) {
   let recorder;
 
   let chunks = [];
@@ -23,7 +12,7 @@ export default function recorderFactory(stream, recordTolerance = 0) {
   let stopTimeout;
 
   function downloadVideo() {
-    realDownload(chunks, motionStart, new Date());
+    donwloadWebmVideo(chunks, motionStart, new Date());
     chunks = [];
     recorder = null;
   }

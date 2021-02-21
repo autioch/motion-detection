@@ -1,26 +1,37 @@
 import {
   TAKE_SCREENSHOT,
-  SET_BACKGROUND_FRAME
+  SET_BACKGROUND_FRAME,
+  SET_VIDEO_STREAM
 } from './actionTypes';
 
-import core from '../core';
+import downloadCanvasScreenshot from '../core/downloadCanvasScreenshot';
 
 export function reducer(state, action) { // eslint-disable-line max-statements
   const { type, payload } = action; // eslint-disable-line no-unused-vars
 
   switch (type) {
     case TAKE_SCREENSHOT: {
-      core.takeScreenshot();
+      downloadCanvasScreenshot();
 
       // TODO Notify user somehow?
       return state;
     }
 
-    case SET_BACKGROUND_FRAME: {
-      core.setBackgroundFrame();
+    case SET_VIDEO_STREAM: {
+      const { videoStream } = payload;
 
+      return {
+        ...state,
+        videoStream
+      };
+    }
+
+    case SET_BACKGROUND_FRAME: {
       // TODO Notify user somehow?
-      return state;
+      return {
+        ...state,
+        backgroundFrame: ''
+      };
     }
 
     default:

@@ -5,13 +5,18 @@ const PIXEL = 4;
 const BLUE = 2;
 const GREEN = 1;
 
-export default function getRectImageDiffer({ quality, colorTolerance }, compareWidth, compareHeight) {
+export default function getRectImageDiffer(compareWidth, compareHeight, quality, colorTolerance) {
   const pixelRowSize = compareWidth * PIXEL;
   const pixelCount = pixelRowSize * compareHeight;
+
   let topRow;
+
   let bottomRow;
+
   let leftCol;
+
   let rightCol;
+
   let changed;
 
   function reset() {
@@ -46,10 +51,10 @@ export default function getRectImageDiffer({ quality, colorTolerance }, compareW
 
     for (let pixel = 0; pixel < pixelCount; pixel = pixel + PIXEL) {
       if (
-      noticeablyDiffers(backgroundFrame[pixel] - currentFrame[pixel]) ||
+        noticeablyDiffers(backgroundFrame[pixel] - currentFrame[pixel]) ||
       noticeablyDiffers(backgroundFrame[pixel + GREEN] - currentFrame[pixel + GREEN]) ||
       noticeablyDiffers(backgroundFrame[pixel + BLUE] - currentFrame[pixel + BLUE])
-    ) {
+      ) {
         changed = true;
         markChange((pixel % pixelRowSize) / PIXEL, Math.floor(pixel / pixelRowSize));
       }

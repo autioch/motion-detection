@@ -7,9 +7,10 @@ const GREEN = 1;
 
 const MAX_DIFF_PIXEL = 5;
 
-export default function getPixelImageDiffer({ quality, colorTolerance }, compareWidth, compareHeight) {
+export default function getPixelImageDiffer(compareWidth, compareHeight, quality, colorTolerance) {
   const pixelRowSize = compareWidth * PIXEL;
   const pixelCount = pixelRowSize * compareHeight;
+
   let pixels;
 
   function reset() {
@@ -29,10 +30,10 @@ export default function getPixelImageDiffer({ quality, colorTolerance }, compare
 
     for (let pixel = 0; pixel < pixelCount; pixel = pixel + PIXEL) {
       if (
-      noticeablyDiffers(backgroundFrame[pixel] - currentFrame[pixel]) ||
+        noticeablyDiffers(backgroundFrame[pixel] - currentFrame[pixel]) ||
       noticeablyDiffers(backgroundFrame[pixel + GREEN] - currentFrame[pixel + GREEN]) ||
       noticeablyDiffers(backgroundFrame[pixel + BLUE] - currentFrame[pixel + BLUE])
-    ) {
+      ) {
         markChange((pixel % pixelRowSize) / PIXEL, Math.floor(pixel / pixelRowSize));
       }
     }
