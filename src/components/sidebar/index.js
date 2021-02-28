@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Drawer, Button } from 'antd';
+import './index.scss';
 
 export default function Sidebar({ children }) {
   const [visible, setVisible] = useState(false);
@@ -14,7 +15,7 @@ export default function Sidebar({ children }) {
 
   return (
     <>
-      <Button type="primary" onClick={showDrawer}>Settings</Button>
+      <Button type="primary" className="c-sidebar-toggle" onClick={showDrawer}>Settings</Button>
       <Drawer
         title="Settings"
         placement="left"

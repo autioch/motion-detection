@@ -20,11 +20,11 @@ function App() {
 
   return (
     <div className="App">
+      <Video videoStream={state.videoStream} />
       <ErrorLog/>
       <Sidebar>
         <Controls />
       </Sidebar>
-      <Video videoStream={state.videoStream} />
     </div>
   );
 }
