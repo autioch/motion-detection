@@ -5,10 +5,14 @@ export default function getVideoFrameGetter(compareWidth, compareHeight) {
   canvas.width = compareWidth;
   canvas.height = compareHeight;
 
-  return function getVideoFrame(video) {
+  function getVideoFrame(video) {
     context.clearRect(0, 0, compareWidth, compareHeight);
     context.drawImage(video, 0, 0, compareWidth, compareHeight);
 
     return context.getImageData(0, 0, compareWidth, compareHeight).data;
-  };
+  }
+
+  getVideoFrame.canvas = canvas;
+
+  return getVideoFrame;
 }

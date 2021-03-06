@@ -1,11 +1,14 @@
-import schema from '../core/schema';
+import { RECORD_MODE } from '../consts';
 
 export const initialState = {
-  schema,
-  isInMotion: false,
-  lastStatic: performance.now(),
-  lastMotion: performance.now(),
-  changedData: {},
-  backgroundFrame: null,
-  videoStream: null
+  videoStream: null,
+  lastRender: Date.now(),
+  currentRender: Date.now() + 1,
+  recorderState: RECORD_MODE.WAITING,
+  detectMotion: false,
+  motionColor: {
+    R: 0,
+    G: 255,
+    B: 0
+  }
 };

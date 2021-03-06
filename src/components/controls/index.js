@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars, no-empty-function */
-import { Switch, Slider, Select } from 'antd';
+import { Switch, Slider, Select, Button } from 'antd';
 import { useStore } from '../../store';
+import { changeSetting } from '../../reducer';
+import thing from '../../thing';
 
 const { Option } = Select; // eslint-disable-line no-shadow
 
@@ -49,13 +51,18 @@ function Item({ id, control }) {
 }
 
 export default function Controls() {
-  const [state] = useStore();
-  const { schema } = state;
-  const controls = Object.entries(schema);
+  const [state, dispatch] = useStore();
+  const { detectMotion } = state;
 
   return (
     <div className="controls">
-      {controls.map(([key, control]) => <Item key={key} id={key} control={control}/>)}
+      <Button className="c-overlay__background-frame" onClick={thing.setBackgroundFrame}>Set background frame</Button>
+
+      <div className="controls-item">
+        <div className="controls-item__label">Detect motion</div>
+        <Switch checked={detectMotion} onChange={() => dispatch(changeSetting('detectMotion', !detectMotion))} />
+      </div>
+
     </div>
   );
 }
