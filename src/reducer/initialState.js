@@ -1,4 +1,4 @@
-import { RECORD_MODE, COMPARISON_MODE } from '../consts';
+import { RECORD_MODE, COMPARISON_IMAGE, COMPARISON_MODE } from '../consts';
 
 export const initialState = {
   videoStream: null,
@@ -8,7 +8,8 @@ export const initialState = {
   detectMotion: false,
   colorNoiseTolerance: 40,
   comparisonQuality: 10,
-  comparisonMode: COMPARISON_MODE.PREVIOUS,
+  comparisonImage: COMPARISON_IMAGE.PREVIOUS,
+  comparisonMode: COMPARISON_MODE.PIXEL,
   motionColor: {
     R: 0,
     G: 255,

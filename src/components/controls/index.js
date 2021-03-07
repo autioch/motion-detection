@@ -3,7 +3,7 @@ import { Switch, Slider, Select, Button } from 'antd';
 import { useStore } from '../../store';
 import { changeSetting } from '../../reducer';
 import thing from '../../thing';
-import { MAX_COMPARISON_QUALITY, COMPARISON_MODE, COMPARISON_MODE_LABEL } from '../../consts';
+import { MAX_COMPARISON_QUALITY, COMPARISON_IMAGE, COMPARISON_IMAGE_LABEL, COMPARISON_MODE, COMPARISON_MODE_LABEL } from '../../consts';
 
 const { Option } = Select; // eslint-disable-line no-shadow
 
@@ -19,18 +19,22 @@ function hexToRgb(h) {
   };
 }
 
-const comparisonOptions = Object.values(COMPARISON_MODE).map((id) => ({
+const comparisonImageOptions = Object.values(COMPARISON_IMAGE).map((id) => ({
+  id,
+  label: COMPARISON_IMAGE_LABEL[id]
+}));
+
+const comparisonModeOptions = Object.values(COMPARISON_MODE).map((id) => ({
   id,
   label: COMPARISON_MODE_LABEL[id]
 }));
 
 export default function Controls() {
   const [state, dispatch] = useStore();
-  const { detectMotion, motionColor, colorNoiseTolerance, comparisonQuality, comparisonMode } = state;
+  const { detectMotion, motionColor, colorNoiseTolerance, comparisonQuality, comparisonImage, comparisonMode } = state;
 
   return (
     <div className="controls">
-      <Button className="c-overlay__background-frame" onClick={thing.setBackgroundFrame}>Set background frame</Button>
 
       <div className="controls-item">
         <div className="controls-item__label">Detect motion</div>
@@ -53,8 +57,19 @@ export default function Controls() {
       </div>
       <div className="controls-item">
         <div className="controls-item__label">Comparison image</div>
-        <Select value={comparisonMode}>
-          {comparisonOptions.map(({ id, label }) => <Option key={id} value={id}>{label}</Option>)}
+        <Select value={comparisonImage} onChange={(val) => dispatch(changeSetting('comparisonImage', val))}>
+          {comparisonImageOptions.map(({ id, label }) => <Option key={id} value={id}>{label}</Option>)}
+        </Select>
+        {comparisonImage === COMPARISON_IMAGE.CUSTOM ? <Button
+          className="c-overlay__background-frame"
+          onClick={thing.setBackgroundFrame}>
+          Set background image
+        </Button> : ''}
+      </div>
+      <div className="controls-item">
+        <div className="controls-item__label">Comparison mode</div>
+        <Select value={comparisonMode} onChange={(val) => dispatch(changeSetting('comparisonMode', val))}>
+          {comparisonModeOptions.map(({ id, label }) => <Option key={id} value={id}>{label}</Option>)}
         </Select>
       </div>
 

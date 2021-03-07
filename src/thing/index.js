@@ -2,8 +2,9 @@ import downloadCanvasScreenshot from './downloadCanvasScreenshot';
 import getDimensions from './getDimensions';
 import getUserMedia from './getUserMedia';
 import getVideoFrameGetter from './getVideoFrameGetter';
+import getDifferencePixel from './getDifferencePixel';
 import getDifferenceRect from './getDifferenceRect';
-import { MAX_COMPARISON_QUALITY } from '../consts';
+import { MAX_COMPARISON_QUALITY, COMPARISON_IMAGE, COMPARISON_MODE } from '../consts';
 
 const { width, height } = getDimensions();
 
@@ -58,11 +59,20 @@ function setComparisonQuality(newComparisonQuality) {
   setBackgroundFrame();
 }
 
-function getDiff(colorNoiseTolerance) {
+function getDiff(colorNoiseTolerance, comparisonImage, comparisonMode) {
   const currentFrame = videoFrameGetter(videoElement);
-  const diff = getDifferenceRect(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance);
 
-  backgroundFrame = currentFrame;
+  let diff;
+
+  if (comparisonMode === COMPARISON_MODE.SINGLE_RECT) {
+    diff = getDifferenceRect(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance);
+  } else {
+    diff = getDifferencePixel(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance);
+  }
+
+  if (comparisonImage === COMPARISON_IMAGE.PREVIOUS) {
+    backgroundFrame = currentFrame;
+  }
 
   // todo
   return {

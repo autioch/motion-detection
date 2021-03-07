@@ -27,21 +27,6 @@ const schema = {
       label: 'Pixel'
     }]
   },
-  background: {
-    label: 'Compare style',
-    type: 'list',
-    value: 2,
-    options: [{
-      value: 1,
-      label: 'Previous frame'
-    }, {
-      value: 2,
-      label: 'Background frame'
-    }, {
-      value: 3,
-      label: 'Last static frame'
-    }]
-  },
 
   // timeTolerance: {
   //   label: 'Motion pause tolerance',

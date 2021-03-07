@@ -6,11 +6,11 @@ import './index.scss';
 
 export default function RectMotion() {
   const [state] = useStore();
-  const { motionColor, colorNoiseTolerance, comparisonQuality } = state;
+  const { motionColor, colorNoiseTolerance, comparisonQuality, comparisonImage } = state;
 
   const [diff, setDiff] = useState({});
 
-  useRaf(() => setDiff(thing.getDiff(colorNoiseTolerance, comparisonQuality)));
+  useRaf(() => setDiff(thing.getDiff(colorNoiseTolerance, comparisonQuality, comparisonImage)));
 
   return (
     <div

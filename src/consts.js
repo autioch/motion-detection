@@ -12,14 +12,24 @@ export const RECORD_MODE_LABEL = {
 
 export const MAX_COMPARISON_QUALITY = 20;
 
-export const COMPARISON_MODE = {
+export const COMPARISON_IMAGE = {
   PREVIOUS: 1,
   CUSTOM: 2,
   LAST_STATIC: 3
 };
 
+export const COMPARISON_IMAGE_LABEL = {
+  [COMPARISON_IMAGE.PREVIOUS]: 'Live (previous frame)',
+  [COMPARISON_IMAGE.CUSTOM]: 'Selected frame',
+  [COMPARISON_IMAGE.LAST_STATIC]: 'Last static frame'
+};
+
+export const COMPARISON_MODE = {
+  SINGLE_RECT: 1,
+  PIXEL: 2
+};
+
 export const COMPARISON_MODE_LABEL = {
-  [COMPARISON_MODE.PREVIOUS]: 'Live (previous frame)',
-  [COMPARISON_MODE.CUSTOM]: 'Selected frame',
-  [COMPARISON_MODE.LAST_STATIC]: 'Last static frame'
+  [COMPARISON_MODE.SINGLE_RECT]: 'Single rect',
+  [COMPARISON_MODE.PIXEL]: 'Pixels'
 };
