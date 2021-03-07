@@ -1,58 +1,32 @@
-/* eslint-disable no-unused-vars, no-empty-function */
+/* eslint-disable max-len */
 import { Switch, Slider, Select, Button } from 'antd';
 import { useStore } from '../../store';
 import { changeSetting } from '../../reducer';
 import thing from '../../thing';
+import { MAX_COMPARISON_QUALITY, COMPARISON_MODE, COMPARISON_MODE_LABEL } from '../../consts';
 
 const { Option } = Select; // eslint-disable-line no-shadow
 
-function ListSelect({ id, control }) {
-  return (
-    <Select>
-      {control.options.map(({ value, label }, index) => <Option key={index} value={value}>{label}</Option>)}
-    </Select>
-  );
+function rgbToHex({ R, G, B }) {
+  return `#${[R, G, B].map((hex) => hex.toString(16).padStart(2, '0')).join('')}`;
 }
 
-function RangeSlider({ id, control }) {
-  return (
-    <Slider onChange={() => {}} />
-  );
+function hexToRgb(h) {
+  return {
+    R: Number(`0x${h[1]}${h[2]}`),
+    G: Number(`0x${h[3]}${h[4]}`),
+    B: Number(`0x${h[5]}${h[6]}`)
+  };
 }
 
-function BoolSwitch({ id, control }) {
-  return (
-    <Switch onChange={() => {}} />
-  );
-}
-
-function Color({ id, control }) {
-  return (
-    <input type="color" onChange={() => {}}/>
-  );
-}
-
-const TYPES = {
-  'boolean': BoolSwitch,
-  range: RangeSlider,
-  list: ListSelect,
-  color: Color
-};
-
-function Item({ id, control }) {
-  const Control = TYPES[control.type];
-
-  return (
-    <div className="controls-item">
-      <div className="controls-item__label">{control.label}</div>
-      <Control id={id} control={control} />
-    </div>
-  );
-}
+const comparisonOptions = Object.values(COMPARISON_MODE).map((id) => ({
+  id,
+  label: COMPARISON_MODE_LABEL[id]
+}));
 
 export default function Controls() {
   const [state, dispatch] = useStore();
-  const { detectMotion } = state;
+  const { detectMotion, motionColor, colorNoiseTolerance, comparisonQuality, comparisonMode } = state;
 
   return (
     <div className="controls">
@@ -61,6 +35,27 @@ export default function Controls() {
       <div className="controls-item">
         <div className="controls-item__label">Detect motion</div>
         <Switch checked={detectMotion} onChange={() => dispatch(changeSetting('detectMotion', !detectMotion))} />
+      </div>
+      <div className="controls-item">
+        <div className="controls-item__label">Motion color</div>
+        <input type="color" value={rgbToHex(motionColor)} onChange={(ev) => dispatch(changeSetting('motionColor', hexToRgb(ev.target.value)))} />
+      </div>
+      <div className="controls-item">
+        <div className="controls-item__label">Color noise tolerance</div>
+        <Slider min={0} max={255} value={colorNoiseTolerance} onChange={(val) => dispatch(changeSetting('colorNoiseTolerance', val))} />
+      </div>
+      <div className="controls-item">
+        <div className="controls-item__label">Comparison quality</div>
+        <Slider min={1} max={MAX_COMPARISON_QUALITY} value={comparisonQuality} onChange={(val) => {
+          dispatch(changeSetting('comparisonQuality', val));
+          thing.setComparisonQuality(val);
+        }} />
+      </div>
+      <div className="controls-item">
+        <div className="controls-item__label">Comparison image</div>
+        <Select value={comparisonMode}>
+          {comparisonOptions.map(({ id, label }) => <Option key={id} value={id}>{label}</Option>)}
+        </Select>
       </div>
 
     </div>

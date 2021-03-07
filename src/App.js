@@ -13,9 +13,11 @@ import thing from './thing';
 
 function App() {
   const [state, dispatch] = useStore();
-  const { detectMotion } = state;
+  const { detectMotion, comparisonQuality } = state;
 
   useEffect(() => {
+    thing.setComparisonQuality(comparisonQuality);
+
     thing.getUserMedia().then((videoStream) => {
       dispatch(setVideoStream(videoStream));
       thing.setVideoStream(videoStream);
