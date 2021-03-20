@@ -10,6 +10,8 @@ export const initialState = {
   comparisonQuality: 10,
   comparisonImage: COMPARISON_IMAGE.PREVIOUS,
   comparisonMode: COMPARISON_MODE.PIXEL,
+  recordMotion: false,
+  recordMotionPauseTolerance: 5,
   motionColor: {
     R: 0,
     G: 255,

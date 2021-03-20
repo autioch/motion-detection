@@ -2,7 +2,11 @@ import donwloadWebmVideo from './donwloadWebmVideo';
 
 const MILISECOND = 1000;
 
-export default function getStreamRecorder(stream, recordTolerance = 0) {
+// https://www.npmjs.com/package/react-media-recorder
+// https://www.npmjs.com/package/@wmik/use-media-recorder
+// https://www.npmjs.com/package/use-media-recorder
+
+export default function getStreamRecorder(stream) {
   let recorder;
 
   let chunks = [];
@@ -10,6 +14,8 @@ export default function getStreamRecorder(stream, recordTolerance = 0) {
   let motionStart;
 
   let stopTimeout;
+
+  let recordTolerance = 0;
 
   function downloadVideo() {
     donwloadWebmVideo(chunks, motionStart, new Date());
@@ -24,7 +30,8 @@ export default function getStreamRecorder(stream, recordTolerance = 0) {
     stopTimeout = null;
   }
 
-  function startRecording() {
+  function startRecording(newRecordTolerance = 0) {
+    recordTolerance = newRecordTolerance;
     cancelStopRecording();
 
     if (recorder) {
@@ -44,7 +51,7 @@ export default function getStreamRecorder(stream, recordTolerance = 0) {
     }
   }
 
-  function stopRecording(immediate) {
+  function stopRecording(immediate = false) {
     if (immediate) {
       realStopRecording();
     }
@@ -55,8 +62,18 @@ export default function getStreamRecorder(stream, recordTolerance = 0) {
     stopTimeout = setTimeout(realStopRecording, recordTolerance * MILISECOND);
   }
 
+  function toggleRecording() {
+    stopTimeout = null;
+    if (recorder?.state === 'recording') {
+      recorder.stop();
+    } else {
+      startRecording(0);
+    }
+  }
+
   return {
     startRecording,
-    stopRecording
+    stopRecording,
+    toggleRecording
   };
 }

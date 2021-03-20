@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export const useObserver = ({ callback, element }) => {
+export function useObserver({ callback, element }) {
   const current = element?.current;
 
   const observer = useRef(null);
@@ -27,9 +27,9 @@ export const useObserver = ({ callback, element }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current]);
-};
+}
 
-export const useCanvas = (drawFn) => {
+export function useCanvas(drawFn) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export const useCanvas = (drawFn) => {
   }, [drawFn]);
 
   return canvasRef;
-};
+}
 
 export function useRaf(callback) {
   const savedCallback = useRef(callback);
@@ -73,4 +73,24 @@ export function useRaf(callback) {
 
     return () => cancelAnimationFrame(id);
   }, []);
+}
+
+export function useInterval(callback, delay) {
+  const savedCallback = useRef(callback);
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  });
+
+  useEffect(() => {
+    const tick = () => savedCallback.current();
+
+    if (typeof delay === 'number') {
+      const id = setInterval(tick, delay);
+
+      return () => clearInterval(id);
+    }
+
+    return undefined; // eslint-disable-line consistent-return
+  }, [delay]);
 }

@@ -1,26 +1,26 @@
 import Controls from './components/controls';
 import ErrorLog from './components/errorLog';
+import Motion from './components/motion';
+import Overlay from './components/overlay';
 import Sidebar from './components/sidebar';
 import Video from './components/video';
-import Overlay from './components/overlay';
-import Motion from './components/motion';
 import './App.scss';
 import { useEffect } from 'react';
 import { setVideoStream } from './reducer';
 import { useStore } from './store';
 
-import thing from './thing';
+import core from './core';
 
 function App() {
   const [state, dispatch] = useStore();
   const { comparisonQuality } = state;
 
   useEffect(() => {
-    thing.setComparisonQuality(comparisonQuality);
+    core.setComparisonQuality(comparisonQuality);
 
-    thing.getUserMedia().then((videoStream) => {
+    core.getUserMedia().then((videoStream) => {
       dispatch(setVideoStream(videoStream));
-      thing.setVideoStream(videoStream);
+      core.setVideoStream(videoStream);
     });
 
     // empty array to make this effect run only once

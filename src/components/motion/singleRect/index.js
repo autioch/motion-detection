@@ -1,15 +1,18 @@
+/* eslint-disable max-len */
 import { useState } from 'react';
 import { useStore } from '../../../store';
-import thing from '../../../thing';
+import core from '../../../core';
 import { useRaf } from '../../../utils';
 import './index.scss';
 
 export default function RectMotion() {
   const [state] = useStore();
-  const { motionColor, colorNoiseTolerance, comparisonImage, comparisonMode } = state;
+  const { motionColor, colorNoiseTolerance, comparisonImage, comparisonMode, recordMotion, recordMotionPauseTolerance } = state;
   const [diff, setDiff] = useState({});
 
-  useRaf(() => setDiff(thing.getDiff(colorNoiseTolerance, comparisonImage, comparisonMode)));
+  useRaf(() => setDiff(core.getDiff(colorNoiseTolerance, comparisonImage, comparisonMode)));
+
+  core.handleRecording(recordMotion, diff.isChanged, recordMotionPauseTolerance);
 
   return (
     <div

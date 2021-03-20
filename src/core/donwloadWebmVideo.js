@@ -8,7 +8,7 @@ export default function donwloadWebmVideo(chunks, startDateTime, stopDateTime) {
   });
 
   const duration = Math.round((stopDateTime.getTime() - startDateTime.getTime()) / MILISECOND);
-  const fileName = `motion\\motion${startDateTime.toLocaleString()}  ${duration}s.webm`;
+  const fileName = `motion${startDateTime.toLocaleString()}  ${duration}s.webm`;
 
   download(downloadData, fileName);
 }

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { Button } from 'antd';
 import './index.scss';
-import thing from '../../thing';
+import core from '../../core';
 import { useStore } from '../../store';
 import { RECORD_MODE_LABEL } from '../../consts';
 
@@ -26,7 +26,8 @@ export default function Video() {
   return (
     <div className="c-overlay">
       <div className="c-overlay__tr">
-        <Button onClick={thing.takeScreenshort}>Screenshot</Button>
+        <Button onClick={core.takeScreenshort}>Screenshot</Button>
+        <Button onClick={core.toggleRecording}>Record video</Button>
       </div>
       <div className="c-overlay__br">
         <span className="c-overlay__text">{getFps(lastRender, currentRender)} FPS</span>

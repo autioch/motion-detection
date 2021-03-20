@@ -5,6 +5,7 @@ import getUserMedia from './getUserMedia';
 import getVideoFrameGetter from './getVideoFrameGetter';
 import getDifferencePixel from './getDifferencePixel';
 import getDifferenceRect from './getDifferenceRect';
+import getStreamRecorder from './getStreamRecorder';
 import { MAX_COMPARISON_QUALITY, COMPARISON_IMAGE, COMPARISON_MODE } from '../consts';
 
 const { width, height } = getDimensions();
@@ -27,8 +28,11 @@ let originaWidthModifier = 1;
 
 let originaHeightModifier = 1;
 
+let streamRecorder;
+
 function setVideoStream(newVideoStream) {
   videoStream = newVideoStream; // eslint-disable-line no-unused-vars
+  streamRecorder = getStreamRecorder(videoStream);
 }
 
 function setVideoElement(newVideoElement) {
@@ -90,7 +94,23 @@ function getDiff(colorNoiseTolerance, comparisonImage, comparisonMode) {
   return diff;
 }
 
-const thing = {
+function handleRecording(recordMotion, isChanged, recordMotionPauseTolerance) {
+  if (recordMotion) {
+    if (isChanged) {
+      streamRecorder.startRecording(recordMotionPauseTolerance);
+    } else {
+      streamRecorder.stopRecording();
+    }
+  } else {
+    streamRecorder.stopRecording(true);
+  }
+}
+
+function toggleRecording() {
+  streamRecorder.toggleRecording();
+}
+
+const core = {
   setVideoElement,
   setVideoStream,
   takeScreenshort,
@@ -98,7 +118,9 @@ const thing = {
   setComparisonQuality,
   getDimensions,
   getUserMedia,
-  getDiff
+  getDiff,
+  handleRecording,
+  toggleRecording
 };
 
-export default thing;
+export default core;

@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react';
 import './index.scss';
-import thing from '../../thing';
+import core from '../../core';
 
 const startPlaying = (ev) => ev.target.play();
 
 export default function Video({ videoStream }) {
   const refVideo = useRef(null);
-  const { width, height } = thing.getDimensions();
+  const { width, height } = core.getDimensions();
 
   useEffect(() => {
-    thing.setVideoElement(refVideo.current);
+    core.setVideoElement(refVideo.current);
     if (refVideo.current) {
       refVideo.current.srcObject = videoStream;
     }
