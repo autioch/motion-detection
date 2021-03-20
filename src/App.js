@@ -3,7 +3,7 @@ import ErrorLog from './components/errorLog';
 import Sidebar from './components/sidebar';
 import Video from './components/video';
 import Overlay from './components/overlay';
-import RectMotion from './components/rectMotion';
+import Motion from './components/motion';
 import './App.scss';
 import { useEffect } from 'react';
 import { setVideoStream } from './reducer';
@@ -13,7 +13,7 @@ import thing from './thing';
 
 function App() {
   const [state, dispatch] = useStore();
-  const { detectMotion, comparisonQuality } = state;
+  const { comparisonQuality } = state;
 
   useEffect(() => {
     thing.setComparisonQuality(comparisonQuality);
@@ -32,7 +32,7 @@ function App() {
       <div className="app__wrapper">
         <div className="app__content">
           <Video videoStream={state.videoStream} />
-          {detectMotion ? <RectMotion /> : ''}
+          <Motion/>
         </div>
       </div>
       <Overlay/>

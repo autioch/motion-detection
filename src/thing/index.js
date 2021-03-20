@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import downloadCanvasScreenshot from './downloadCanvasScreenshot';
 import getDimensions from './getDimensions';
 import getUserMedia from './getUserMedia';
@@ -67,23 +68,26 @@ function getDiff(colorNoiseTolerance, comparisonImage, comparisonMode) {
   if (comparisonMode === COMPARISON_MODE.SINGLE_RECT) {
     diff = getDifferenceRect(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance);
   } else {
-    diff = getDifferencePixel(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance);
+    diff = getDifferencePixel(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance, originaWidthModifier, originaHeightModifier);
   }
 
   if (comparisonImage === COMPARISON_IMAGE.PREVIOUS) {
     backgroundFrame = currentFrame;
   }
 
-  // todo
-  return {
-    top: Math.floor(diff.top * originaHeightModifier),
-    left: Math.floor(diff.left * originaWidthModifier),
-    bottom: Math.floor(diff.bottom * originaHeightModifier),
-    right: Math.floor(diff.right * originaWidthModifier),
-    width: Math.floor(diff.width * originaWidthModifier),
-    height: Math.floor(diff.height * originaHeightModifier),
-    isChanged: diff.isChanged
-  };
+  if (comparisonMode === COMPARISON_MODE.SINGLE_RECT) {
+    return {
+      top: Math.floor(diff.top * originaHeightModifier),
+      left: Math.floor(diff.left * originaWidthModifier),
+      bottom: Math.floor(diff.bottom * originaHeightModifier),
+      right: Math.floor(diff.right * originaWidthModifier),
+      width: Math.floor(diff.width * originaWidthModifier),
+      height: Math.floor(diff.height * originaHeightModifier),
+      isChanged: diff.isChanged
+    };
+  }
+
+  return diff;
 }
 
 const thing = {

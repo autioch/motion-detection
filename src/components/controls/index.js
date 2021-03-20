@@ -72,7 +72,6 @@ export default function Controls() {
           {comparisonModeOptions.map(({ id, label }) => <Option key={id} value={id}>{label}</Option>)}
         </Select>
       </div>
-
     </div>
   );
 }

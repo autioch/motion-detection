@@ -7,37 +7,17 @@ const BLUE = 2;
 const GREEN = 1;
 
 /* eslint-disable-next-line max-params */
-export default function getDifferencePixel(backgroundFrame, currentFrame, compareWidth, compareHeight, tolerance) {
+export default function getDifferencePixel(backgroundFrame, currentFrame, compareWidth, compareHeight, tolerance, originaWidthModifier, originaHeightModifier) {
   const pixelRowSize = compareWidth * PIXEL;
   const pixelCount = pixelRowSize * compareHeight;
-
-  let topRow = Infinity;
-
-  let bottomRow = 0;
-
-  let leftCol = Infinity;
-
-  let rightCol = 0;
-
-  let isChanged = false;
+  const pixels = [];
 
   function noticeablyDiffers(colorDiff) {
     return (colorDiff > tolerance) || (colorDiff < -tolerance);
   }
 
   function markChange(col, row) {
-    if (col < leftCol) {
-      leftCol = col;
-    }
-    if (col > rightCol) {
-      rightCol = col;
-    }
-    if (row < topRow) {
-      topRow = row;
-    }
-    if (row > bottomRow) {
-      bottomRow = row;
-    }
+    pixels.push((col * originaHeightModifier) - 0.5, (row * originaWidthModifier) - 0.5);
   }
 
   for (let pixel = 0; pixel < pixelCount; pixel = pixel + PIXEL) {
@@ -46,18 +26,12 @@ export default function getDifferencePixel(backgroundFrame, currentFrame, compar
       noticeablyDiffers(backgroundFrame[pixel + GREEN] - currentFrame[pixel + GREEN]) ||
       noticeablyDiffers(backgroundFrame[pixel + BLUE] - currentFrame[pixel + BLUE])
     ) {
-      isChanged = true;
       markChange((pixel % pixelRowSize) / PIXEL, Math.floor(pixel / pixelRowSize));
     }
   }
 
   return {
-    top: topRow,
-    left: leftCol,
-    bottom: bottomRow,
-    right: rightCol,
-    width: rightCol - leftCol,
-    height: bottomRow - topRow,
-    isChanged
+    pixels,
+    isChanged: pixels.length > 0
   };
 }

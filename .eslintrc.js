@@ -20,6 +20,7 @@ module.exports = {
     'id-blacklist': ['off'],
     'id-length': ['off'],
     'no-undefined': ['off'],
+    'no-plusplus': ['off'],
     'no-underscore-dangle': ['off'],
     'class-methods-use-this': ['off']
   }
