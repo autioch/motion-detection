@@ -4,7 +4,7 @@ import Motion from './components/motion';
 import { Drawer, Button } from 'antd';
 import './App.scss';
 import { useEffect, useState, useRef } from 'react';
-import { setVideoStream } from './reducer';
+import { takeScreenshot, toggleRecording, initiateCore } from './reducer';
 import { useStore } from './store';
 import { RECORD_MODE_LABEL } from './consts';
 import core from './core';
@@ -20,25 +20,16 @@ const startPlaying = (ev) => ev.target.play();
 
 function App() {
   const [state, dispatch] = useStore();
-  const { comparisonQuality, videoStream, lastRender, currentRender, recorderState, detectMotion } = state;
+  const { videoStream, lastRender, currentRender, recorderState, detectMotion } = state;
   const [visible, setVisible] = useState(false);
   const showDrawer = () => setVisible(true);
   const onClose = () => setVisible(false);
   const { width, height } = core.getDimensions();
   const refVideo = useRef(null);
 
-  useEffect(() => {
-    core.setVideoElement(refVideo.current);
-    core.setComparisonQuality(comparisonQuality);
-    core.getUserMedia().then((newVideoStream) => {
-      dispatch(setVideoStream(newVideoStream));
-      core.setVideoStream(newVideoStream);
-    });
-
-    // empty array to make this effect run only once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  // empty array to make this effect run only once
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => core.getUserMedia().then((newVideoStream) => dispatch(initiateCore(refVideo.current, newVideoStream))), []);
   useEffect(() => refVideo.current && (refVideo.current.srcObject = videoStream), [videoStream]);
 
   return (
@@ -53,15 +44,16 @@ function App() {
             height={height}
             srcObject={videoStream}
           />
-          {detectMotion ? <Motion/> : ''}
+          {detectMotion ? <Motion width={width} height={height}/> : ''}
         </div>
       </div>
       <div className="c-overlay">
         <div className="c-overlay__tr">
-          <Button onClick={core.takeScreenshort}>Screenshot</Button>
-          <Button onClick={core.toggleRecording}>Record video</Button>
+          <Button onClick={() => dispatch(takeScreenshot())}>Screenshot</Button>
+          <Button onClick={() => dispatch(toggleRecording())}>Record video</Button>
         </div>
         <div className="c-overlay__br">
+
           <span className="c-overlay__text">{getFps(lastRender, currentRender)} FPS</span>
           <span className="c-overlay__text">{RECORD_MODE_LABEL[recorderState]}</span>
         </div>

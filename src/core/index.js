@@ -42,7 +42,7 @@ function setVideoElement(newVideoElement) {
   }
 }
 
-function takeScreenshort() {
+function takeScreenshot() {
   videoFrameGetter(videoElement);
 
   downloadCanvasScreenshot(videoFrameGetter.canvas);
@@ -142,7 +142,7 @@ function updateDiffCanvas(canvas, motionColor, comparisonMode, recordMotion, rec
 const core = {
   setVideoElement,
   setVideoStream,
-  takeScreenshort,
+  takeScreenshot,
   setBackgroundFrame,
   setComparisonQuality,
   getDimensions,

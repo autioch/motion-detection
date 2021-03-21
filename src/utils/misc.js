@@ -7,6 +7,7 @@ export function dictToOptions(idDict, labelDict) {
 
 const MILISECOND = 1000;
 
+// todo - core.getfps()
 export function getFps(lastRender, currentRender) {
   const delta = (currentRender - lastRender) / MILISECOND;
 

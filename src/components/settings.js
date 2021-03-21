@@ -1,8 +1,7 @@
 /* eslint-disable max-len */
 import { Switch, Slider, Select, Button, Divider } from 'antd';
 import { useStore } from '../store';
-import { changeSetting } from '../reducer';
-import core from '../core';
+import { changeSetting, setBackgroundFrame, setComparisonQuality } from '../reducer';
 import { MAX_COMPARISON_QUALITY, COMPARISON_IMAGE, COMPARISON_IMAGE_LABEL, COMPARISON_MODE, COMPARISON_MODE_LABEL } from '../consts'; // eslint-disable-line no-shadow
 import { internalToHex, hexToInternal, dictToOptions } from '../utils';
 
@@ -39,7 +38,7 @@ function MotionSettings({ dispatch, motionColor, colorNoiseTolerance, comparison
         <div className="c-settings-item__label">Comparison quality</div>
         <Slider min={1} max={MAX_COMPARISON_QUALITY} value={comparisonQuality} onChange={(val) => {
           dispatch(changeSetting('comparisonQuality', val));
-          core.setComparisonQuality(val);
+          dispatch(setComparisonQuality(val));
         }} />
       </div>
       <div className="c-settings-item">
@@ -49,7 +48,7 @@ function MotionSettings({ dispatch, motionColor, colorNoiseTolerance, comparison
         </Select>
         {comparisonImage === COMPARISON_IMAGE.CUSTOM ? <Button
           className="c-overlay__background-frame"
-          onClick={core.setBackgroundFrame}>
+          onClick={() => dispatch(setBackgroundFrame())}>
       Set background image
         </Button> : ''}
       </div>

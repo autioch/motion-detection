@@ -1,14 +1,24 @@
 import {
-  SET_VIDEO_STREAM,
-  CHANGE_SETTING
+  SET_COMPARISON_QUALITY,
+  CHANGE_SETTING,
+  SET_BACKGROUND_FRAME,
+  TAKE_SCREENSHOT,
+  TOGGLE_RECORDING,
+  INITIATE_CORE
 } from './actionTypes';
 
-export function setVideoStream(videoStream) {
+export function setComparisonQuality(comparisonQuality) {
   return {
-    type: SET_VIDEO_STREAM,
+    type: SET_COMPARISON_QUALITY,
     payload: {
-      videoStream
+      comparisonQuality
     }
+  };
+}
+
+export function setBackgroundFrame() {
+  return {
+    type: SET_BACKGROUND_FRAME
   };
 }
 
@@ -18,6 +28,28 @@ export function changeSetting(key, value) {
     payload: {
       key,
       value
+    }
+  };
+}
+
+export function takeScreenshot() {
+  return {
+    type: TAKE_SCREENSHOT
+  };
+}
+
+export function toggleRecording() {
+  return {
+    type: TOGGLE_RECORDING
+  };
+}
+
+export function initiateCore(videoElement, videoStream) {
+  return {
+    type: INITIATE_CORE,
+    payload: {
+      videoElement,
+      videoStream
     }
   };
 }
