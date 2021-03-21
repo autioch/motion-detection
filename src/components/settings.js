@@ -33,7 +33,7 @@ function MotionSettings({ dispatch, motionColor, colorNoiseTolerance, comparison
         <div className="c-settings-item__label">Motion color</div>
         <input type="color" value={internalToHex(motionColor)} onChange={(ev) => dispatch(changeSetting('motionColor', hexToInternal(ev.target.value)))} />
       </div>
-      <SettingSlider label="Color pause tolerance" min={0} max={255} value={colorNoiseTolerance} setting="colorNoiseTolerance" dispatch={dispatch}/>
+      <SettingSlider label="Color difference tolerance" min={0} max={255} value={colorNoiseTolerance} setting="colorNoiseTolerance" dispatch={dispatch}/>
       <div className="c-settings-item">
         <div className="c-settings-item__label">Comparison quality</div>
         <Slider min={1} max={MAX_COMPARISON_QUALITY} value={comparisonQuality} onChange={(val) => {
@@ -46,11 +46,7 @@ function MotionSettings({ dispatch, motionColor, colorNoiseTolerance, comparison
         <Select value={comparisonImage} onChange={(val) => dispatch(changeSetting('comparisonImage', val))}>
           {comparisonImageOptions.map(({ id, label }) => <Select.Option key={id} value={id}>{label}</Select.Option>)}
         </Select>
-        {comparisonImage === COMPARISON_IMAGE.CUSTOM ? <Button
-          className="c-overlay__background-frame"
-          onClick={() => dispatch(setBackgroundFrame())}>
-      Set background image
-        </Button> : ''}
+        {comparisonImage === COMPARISON_IMAGE.CUSTOM ? <Button className="c-overlay__background-frame" onClick={() => dispatch(setBackgroundFrame())}>Set background image</Button> : ''}
       </div>
       <div className="c-settings-item">
         <div className="c-settings-item__label">Comparison mode</div>

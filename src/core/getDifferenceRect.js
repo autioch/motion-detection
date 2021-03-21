@@ -7,7 +7,7 @@ const BLUE = 2;
 const GREEN = 1;
 
 /* eslint-disable-next-line max-params */
-export default function getDifferenceRect(backgroundFrame, currentFrame, compareWidth, compareHeight, tolerance) {
+export default function getDifferenceRect(backgroundFrame, currentFrame, compareWidth, compareHeight, tolerance, originaWidthModifier, originaHeightModifier) {
   const pixelRowSize = compareWidth * PIXEL;
   const pixelCount = pixelRowSize * compareHeight;
 
@@ -52,12 +52,12 @@ export default function getDifferenceRect(backgroundFrame, currentFrame, compare
   }
 
   return {
-    top: topRow,
-    left: leftCol,
-    bottom: bottomRow,
-    right: rightCol,
-    width: rightCol - leftCol,
-    height: bottomRow - topRow,
+    top: Math.floor(topRow * originaHeightModifier),
+    left: Math.floor(leftCol * originaWidthModifier),
+    bottom: Math.floor(bottomRow * originaHeightModifier),
+    right: Math.floor(rightCol * originaWidthModifier),
+    width: Math.floor((rightCol * originaWidthModifier) - (leftCol * originaWidthModifier)),
+    height: Math.floor((bottomRow * originaHeightModifier) - (topRow * originaHeightModifier)),
     isChanged
   };
 }

@@ -1,4 +1,7 @@
 import { RECORD_MODE, COMPARISON_IMAGE, COMPARISON_MODE } from '../consts';
+import { getDimensions } from '../utils';
+
+const { width, height } = getDimensions();
 
 export const initialState = {
   videoStream: null,
@@ -16,5 +19,7 @@ export const initialState = {
     R: 0,
     G: 255,
     B: 0
-  }
+  },
+  videoWidth: width,
+  videoHeight: height
 };

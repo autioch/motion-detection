@@ -1,4 +1,4 @@
-import donwloadWebmVideo from './donwloadWebmVideo';
+import download from './download';
 
 const MILISECOND = 1000;
 
@@ -18,21 +18,25 @@ export default function getStreamRecorder(stream) {
   let recordTolerance = 0;
 
   function downloadVideo() {
-    donwloadWebmVideo(chunks, motionStart, new Date());
+    const motionStop = new Date();
+    const downloadData = new Blob(chunks, {
+      type: 'video/webm'
+    });
+
+    const duration = Math.round((motionStop.getTime() - motionStart.getTime()) / MILISECOND);
+    const fileName = `motion${motionStart.toLocaleString()}  ${duration}s.webm`;
+
+    download(downloadData, fileName);
     chunks = [];
     recorder = null;
   }
 
-  function cancelStopRecording() {
+  function startRecording(newRecordTolerance = 0) {
+    recordTolerance = newRecordTolerance;
     if (stopTimeout) {
       clearTimeout(stopTimeout);
     }
     stopTimeout = null;
-  }
-
-  function startRecording(newRecordTolerance = 0) {
-    recordTolerance = newRecordTolerance;
-    cancelStopRecording();
 
     if (recorder) {
       return;

@@ -4,7 +4,7 @@ import {
   SET_BACKGROUND_FRAME,
   TAKE_SCREENSHOT,
   TOGGLE_RECORDING,
-  INITIATE_CORE
+  SETUP_VIDEO
 } from './actionTypes';
 
 export function setComparisonQuality(comparisonQuality) {
@@ -44,9 +44,9 @@ export function toggleRecording() {
   };
 }
 
-export function initiateCore(videoElement, videoStream) {
+export function setupVideo(videoElement, videoStream) {
   return {
-    type: INITIATE_CORE,
+    type: SETUP_VIDEO,
     payload: {
       videoElement,
       videoStream

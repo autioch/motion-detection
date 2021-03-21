@@ -1,16 +1,13 @@
 /* eslint-disable max-len */
-import downloadCanvasScreenshot from './downloadCanvasScreenshot';
-import getDimensions from './getDimensions';
-import getUserMedia from './getUserMedia';
-import getVideoFrameGetter from './getVideoFrameGetter';
+import { download } from '../utils';
+import getStreamRecorder from './getStreamRecorder';
 import getDifferencePixel from './getDifferencePixel';
 import getDifferenceRect from './getDifferenceRect';
-import getStreamRecorder from './getStreamRecorder';
 import { MAX_COMPARISON_QUALITY, COMPARISON_IMAGE, COMPARISON_MODE } from '../consts';
 
-const { width, height } = getDimensions();
+let videoWidth;
 
-let videoFrameGetter;
+let videoHeight;
 
 let videoStream;
 
@@ -30,50 +27,45 @@ let originaHeightModifier = 1;
 
 let streamRecorder;
 
-function setVideoStream(newVideoStream) {
-  videoStream = newVideoStream; // eslint-disable-line no-unused-vars
-  streamRecorder = getStreamRecorder(videoStream);
-}
+const videoFrameCanvas = document.createElement('canvas');
+const videoFrameContext = videoFrameCanvas.getContext('2d');
 
-function setVideoElement(newVideoElement) {
-  videoElement = newVideoElement;
-  if (videoFrameGetter) {
-    backgroundFrame = videoFrameGetter(videoElement);
-  }
+function getVideoFrame() {
+  videoFrameContext.clearRect(0, 0, compareWidth, compareHeight);
+  videoFrameContext.drawImage(videoElement, 0, 0, compareWidth, compareHeight);
+
+  return videoFrameContext.getImageData(0, 0, compareWidth, compareHeight).data;
 }
 
 function takeScreenshot() {
-  videoFrameGetter(videoElement);
+  getVideoFrame();
 
-  downloadCanvasScreenshot(videoFrameGetter.canvas);
+  const serializedDate = new Date().toJSON();
+  const timestamp = serializedDate.replace('T', ' ').replace('Z', '');
+  const filename = `motion\\screenshot-${timestamp}.png`;
+
+  videoFrameCanvas.toBlob((blob) => download(blob, filename));
 }
 
 function setBackgroundFrame() {
-  backgroundFrame = videoFrameGetter(videoElement);
+  backgroundFrame = getVideoFrame();
 }
 
 function setComparisonQuality(newComparisonQuality) {
   comparisonQuality = newComparisonQuality;
-  compareWidth = Math.floor((width * comparisonQuality) / MAX_COMPARISON_QUALITY);
-  compareHeight = Math.floor((height * comparisonQuality) / MAX_COMPARISON_QUALITY);
-  originaWidthModifier = Math.floor(width / compareWidth);
-  originaHeightModifier = Math.floor(height / compareHeight);
+  compareWidth = Math.floor((videoWidth * comparisonQuality) / MAX_COMPARISON_QUALITY);
+  compareHeight = Math.floor((videoHeight * comparisonQuality) / MAX_COMPARISON_QUALITY);
+  originaWidthModifier = Math.floor(videoWidth / compareWidth);
+  originaHeightModifier = Math.floor(videoHeight / compareHeight);
 
-  videoFrameGetter = getVideoFrameGetter(compareWidth, compareHeight);
+  videoFrameCanvas.width = compareWidth;
+  videoFrameCanvas.height = compareHeight;
 
-  setBackgroundFrame();
+  setBackgroundFrame(); // todo - only when previous
 }
 
-function fixRect(diff) {
-  return {
-    top: Math.floor(diff.top * originaHeightModifier),
-    left: Math.floor(diff.left * originaWidthModifier),
-    bottom: Math.floor(diff.bottom * originaHeightModifier),
-    right: Math.floor(diff.right * originaWidthModifier),
-    width: Math.floor(diff.width * originaWidthModifier),
-    height: Math.floor(diff.height * originaHeightModifier),
-    isChanged: diff.isChanged
-  };
+function toggleRecording() {
+  streamRecorder.toggleRecording();
 }
 
 function handleRecording(recordMotion, isChanged, recordMotionPauseTolerance) {
@@ -88,32 +80,6 @@ function handleRecording(recordMotion, isChanged, recordMotionPauseTolerance) {
   }
 }
 
-function getDiff(colorNoiseTolerance, comparisonImage, comparisonMode) {
-  const currentFrame = videoFrameGetter(videoElement);
-
-  let diff;
-
-  if (comparisonMode === COMPARISON_MODE.SINGLE_RECT) {
-    diff = getDifferenceRect(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance);
-  } else {
-    diff = getDifferencePixel(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance, originaWidthModifier, originaHeightModifier);
-  }
-
-  if (comparisonImage === COMPARISON_IMAGE.PREVIOUS) {
-    backgroundFrame = currentFrame;
-  }
-
-  if (comparisonMode === COMPARISON_MODE.SINGLE_RECT) {
-    diff = fixRect(diff);
-  }
-
-  return diff;
-}
-
-function toggleRecording() {
-  streamRecorder.toggleRecording();
-}
-
 function updateDiffCanvas(canvas, motionColor, comparisonMode, recordMotion, recordMotionPauseTolerance, colorNoiseTolerance, comparisonImage) {
   if (!canvas) {
     return;
@@ -121,10 +87,16 @@ function updateDiffCanvas(canvas, motionColor, comparisonMode, recordMotion, rec
 
   const context = canvas.getContext('2d');
   const rgbaColor = `rgba(${motionColor.R}, ${motionColor.G}, ${motionColor.B}, 0.5)`;
-  const diff = getDiff(colorNoiseTolerance, comparisonImage, comparisonMode);
+  const currentFrame = getVideoFrame();
+  const diffMethod = comparisonMode === COMPARISON_MODE.SINGLE_RECT ? getDifferenceRect : getDifferencePixel;
+  const diff = diffMethod(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance, originaWidthModifier, originaHeightModifier);
+
+  if (comparisonImage === COMPARISON_IMAGE.PREVIOUS) {
+    backgroundFrame = currentFrame;
+  }
 
   context.fillStyle = rgbaColor;
-  context.clearRect(0, 0, getDimensions().width, getDimensions().height);
+  context.clearRect(0, 0, videoWidth, videoHeight);
 
   if (comparisonMode === COMPARISON_MODE.SINGLE_RECT) {
     context.fillRect(diff.top, diff.left, diff.width, diff.height);
@@ -139,16 +111,23 @@ function updateDiffCanvas(canvas, motionColor, comparisonMode, recordMotion, rec
   handleRecording(recordMotion, diff.isChanged, recordMotionPauseTolerance);
 }
 
+function setupVideo(newVideoElement, newVideoStream, newVideoHeight, newVideoWidth, comparisonQuality2) {
+  videoWidth = newVideoWidth;
+  videoHeight = newVideoHeight;
+  videoElement = newVideoElement;
+  videoStream = newVideoStream;
+
+  setComparisonQuality(comparisonQuality2);
+
+  backgroundFrame = getVideoFrame();
+  streamRecorder = getStreamRecorder(videoStream);
+}
+
 const core = {
-  setVideoElement,
-  setVideoStream,
   takeScreenshot,
   setBackgroundFrame,
   setComparisonQuality,
-  getDimensions,
-  getUserMedia,
-  getDiff,
-  handleRecording,
+  setupVideo,
   toggleRecording,
   updateDiffCanvas
 };

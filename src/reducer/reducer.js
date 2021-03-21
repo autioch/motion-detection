@@ -4,7 +4,7 @@ import {
   CHANGE_SETTING,
   TAKE_SCREENSHOT,
   TOGGLE_RECORDING,
-  INITIATE_CORE
+  SETUP_VIDEO
 } from './actionTypes';
 import core from '../core';
 
@@ -47,13 +47,11 @@ export function reducer(state, action) { // eslint-disable-line max-statements
       return state;
     }
 
-    case INITIATE_CORE : {
+    case SETUP_VIDEO : {
       const { videoElement, videoStream } = payload;
-      const { comparisonQuality } = state;
+      const { videoWidth, videoHeight, comparisonQuality } = state;
 
-      core.setVideoElement(videoElement);
-      core.setComparisonQuality(comparisonQuality);
-      core.setVideoStream(videoStream);
+      core.setupVideo(videoElement, videoStream, videoHeight, videoWidth, comparisonQuality);
 
       return {
         ...state,

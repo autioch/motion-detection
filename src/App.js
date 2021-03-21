@@ -4,11 +4,10 @@ import Motion from './components/motion';
 import { Drawer, Button } from 'antd';
 import './App.scss';
 import { useEffect, useState, useRef } from 'react';
-import { takeScreenshot, toggleRecording, initiateCore } from './reducer';
+import { takeScreenshot, toggleRecording, setupVideo } from './reducer';
 import { useStore } from './store';
 import { RECORD_MODE_LABEL } from './consts';
-import core from './core';
-import { getFps } from './utils';
+import { getFps, getUserMedia } from './utils';
 
 const startPlaying = (ev) => ev.target.play();
 
@@ -20,16 +19,15 @@ const startPlaying = (ev) => ev.target.play();
 
 function App() {
   const [state, dispatch] = useStore();
-  const { videoStream, lastRender, currentRender, recorderState, detectMotion } = state;
+  const { videoStream, lastRender, currentRender, recorderState, detectMotion, videoWidth, videoHeight } = state;
   const [visible, setVisible] = useState(false);
   const showDrawer = () => setVisible(true);
   const onClose = () => setVisible(false);
-  const { width, height } = core.getDimensions();
   const refVideo = useRef(null);
 
   // empty array to make this effect run only once
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => core.getUserMedia().then((newVideoStream) => dispatch(initiateCore(refVideo.current, newVideoStream))), []);
+  useEffect(() => getUserMedia().then((newVideoStream) => dispatch(setupVideo(refVideo.current, newVideoStream))), []);
   useEffect(() => refVideo.current && (refVideo.current.srcObject = videoStream), [videoStream]);
 
   return (
@@ -40,11 +38,11 @@ function App() {
             className="c-video"
             onLoadedMetadata={startPlaying}
             ref={refVideo}
-            width={width}
-            height={height}
+            width={videoWidth}
+            height={videoHeight}
             srcObject={videoStream}
           />
-          {detectMotion ? <Motion width={width} height={height}/> : ''}
+          {detectMotion ? <Motion width={videoWidth} height={videoHeight}/> : ''}
         </div>
       </div>
       <div className="c-overlay">
