@@ -18,10 +18,12 @@ module.exports = {
     'no-magic-numbers': ['off'],
     'line-comment-position': ['off'],
     'id-blacklist': ['off'],
+    'max-params': ['off'],
     'id-length': ['off'],
     'no-undefined': ['off'],
     'no-plusplus': ['off'],
     'no-underscore-dangle': ['off'],
+    'no-return-assign': ['off'],
     'class-methods-use-this': ['off']
   }
 };

@@ -29,31 +29,6 @@ export function useObserver({ callback, element }) {
   }, [current]);
 }
 
-export function useCanvas(drawFn) {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-
-    let animationFrameId;
-
-    const render = () => {
-      drawFn(context);
-      animationFrameId = window.requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      window.cancelAnimationFrame(animationFrameId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [drawFn]);
-
-  return canvasRef;
-}
-
 export function useRaf(callback) {
   const savedCallback = useRef(callback);
 
@@ -62,17 +37,25 @@ export function useRaf(callback) {
   });
 
   useEffect(() => {
-    let id;
+    let animationFrameId;
 
     const tick = () => {
       savedCallback.current();
-      id = requestAnimationFrame(tick);
+      animationFrameId = requestAnimationFrame(tick);
     };
 
-    id = requestAnimationFrame(tick);
+    animationFrameId = requestAnimationFrame(tick);
 
-    return () => cancelAnimationFrame(id);
+    return () => cancelAnimationFrame(animationFrameId);
   }, []);
+}
+
+export function useCanvas(drawFn) {
+  const canvasRef = useRef(null);
+
+  useRaf(() => drawFn(canvasRef.current?.getContext('2d')));
+
+  return canvasRef;
 }
 
 export function useInterval(callback, delay) {

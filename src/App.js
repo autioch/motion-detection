@@ -1,45 +1,81 @@
-import Controls from './components/controls';
-import ErrorLog from './components/errorLog';
+/* eslint-disable max-len */
+import Settings from './components/settings';
 import Motion from './components/motion';
-import Overlay from './components/overlay';
-import Sidebar from './components/sidebar';
-import Video from './components/video';
+import { Drawer, Button } from 'antd';
 import './App.scss';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { setVideoStream } from './reducer';
 import { useStore } from './store';
-
+import { RECORD_MODE_LABEL } from './consts';
 import core from './core';
+import { getFps } from './utils';
+
+const startPlaying = (ev) => ev.target.play();
+
+// possible states:
+// - filenme downloaded
+// el.textContent = 'Recording...';
+// el.textContent = 'Recording stopped.';
+// el.textContent = 'Recording waiting...';
 
 function App() {
   const [state, dispatch] = useStore();
-  const { comparisonQuality } = state;
+  const { comparisonQuality, videoStream, lastRender, currentRender, recorderState, detectMotion } = state;
+  const [visible, setVisible] = useState(false);
+  const showDrawer = () => setVisible(true);
+  const onClose = () => setVisible(false);
+  const { width, height } = core.getDimensions();
+  const refVideo = useRef(null);
 
   useEffect(() => {
+    core.setVideoElement(refVideo.current);
     core.setComparisonQuality(comparisonQuality);
-
-    core.getUserMedia().then((videoStream) => {
-      dispatch(setVideoStream(videoStream));
-      core.setVideoStream(videoStream);
+    core.getUserMedia().then((newVideoStream) => {
+      dispatch(setVideoStream(newVideoStream));
+      core.setVideoStream(newVideoStream);
     });
 
     // empty array to make this effect run only once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => refVideo.current && (refVideo.current.srcObject = videoStream), [videoStream]);
+
   return (
     <div className="App">
       <div className="app__wrapper">
         <div className="app__content">
-          <Video videoStream={state.videoStream} />
-          <Motion/>
+          <video
+            className="c-video"
+            onLoadedMetadata={startPlaying}
+            ref={refVideo}
+            width={width}
+            height={height}
+            srcObject={videoStream}
+          />
+          {detectMotion ? <Motion/> : ''}
         </div>
       </div>
-      <Overlay/>
-      <ErrorLog/>
-      <Sidebar>
-        <Controls />
-      </Sidebar>
+      <div className="c-overlay">
+        <div className="c-overlay__tr">
+          <Button onClick={core.takeScreenshort}>Screenshot</Button>
+          <Button onClick={core.toggleRecording}>Record video</Button>
+        </div>
+        <div className="c-overlay__br">
+          <span className="c-overlay__text">{getFps(lastRender, currentRender)} FPS</span>
+          <span className="c-overlay__text">{RECORD_MODE_LABEL[recorderState]}</span>
+        </div>
+      </div>
+      <Button type="primary" className="c-sidebar-toggle" onClick={showDrawer}>Settings</Button>
+      <Drawer
+        title="Settings"
+        placement="left"
+        closable={true}
+        onClose={onClose}
+        visible={visible}
+      >
+        {visible ? <Settings /> : ''}
+      </Drawer>
     </div>
   );
 }
