@@ -16,7 +16,7 @@ export function setComparisonQuality(comparisonQuality) {
   };
 }
 
-export function setBackgroundFrame() {
+export function setCurrentFrame() {
   return {
     type: SET_BACKGROUND_FRAME
   };

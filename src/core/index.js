@@ -12,13 +12,7 @@ let videoStream;
 
 let videoElement;
 
-let backgroundFrame;
-
-let comparisonQuality;
-
-let compareWidth;
-
-let compareHeight;
+let currentFrame;
 
 let originaWidthModifier = 1;
 
@@ -29,28 +23,24 @@ let streamRecorder;
 const videoFrameCanvas = document.createElement('canvas');
 const videoFrameContext = videoFrameCanvas.getContext('2d');
 
-function getVideoFrame() {
-  videoFrameContext.clearRect(0, 0, compareWidth, compareHeight);
-  videoFrameContext.drawImage(videoElement, 0, 0, compareWidth, compareHeight);
+function setCurrentFrame() {
+  videoFrameContext.clearRect(0, 0, videoFrameCanvas.width, videoFrameCanvas.height);
+  videoFrameContext.drawImage(videoElement, 0, 0, videoFrameCanvas.width, videoFrameCanvas.height);
 
-  return videoFrameContext.getImageData(0, 0, compareWidth, compareHeight).data;
-}
-
-function setBackgroundFrame() {
-  backgroundFrame = getVideoFrame();
+  currentFrame = videoFrameContext.getImageData(0, 0, videoFrameCanvas.width, videoFrameCanvas.height).data;
 }
 
 function setComparisonQuality(newComparisonQuality) {
-  comparisonQuality = newComparisonQuality;
-  compareWidth = Math.floor((videoWidth * comparisonQuality) / MAX_COMPARISON_QUALITY);
-  compareHeight = Math.floor((videoHeight * comparisonQuality) / MAX_COMPARISON_QUALITY);
+  const compareHeight = (videoHeight * newComparisonQuality) / MAX_COMPARISON_QUALITY;
+  const compareWidth = (videoWidth * newComparisonQuality) / MAX_COMPARISON_QUALITY;
+
   originaWidthModifier = Math.floor(videoWidth / compareWidth);
   originaHeightModifier = Math.floor(videoHeight / compareHeight);
 
-  videoFrameCanvas.width = compareWidth;
-  videoFrameCanvas.height = compareHeight;
+  videoFrameCanvas.width = Math.floor(compareWidth);
+  videoFrameCanvas.height = Math.floor(compareHeight);
 
-  setBackgroundFrame(); // todo - only when previous
+  setCurrentFrame(); // todo - only when previous
 }
 
 function toggleRecording() {
@@ -74,26 +64,32 @@ function updateDiffCanvas(canvas, motionColor, comparisonMode, recordMotion, rec
     return;
   }
 
+  function noticeablyDiffers(colorDiff) {
+    return (colorDiff > colorNoiseTolerance) || (colorDiff < -colorNoiseTolerance);
+  }
+
   const context = canvas.getContext('2d');
   const rgbaColor = `rgba(${motionColor.R}, ${motionColor.G}, ${motionColor.B}, 0.5)`;
-  const currentFrame = getVideoFrame();
+  const previousFrame = currentFrame;
+
+  setCurrentFrame();
   const diffMethod = comparisonMode === COMPARISON_MODE.SINGLE_RECT ? getDifferenceRect : getDifferencePixel;
-  const diff = diffMethod(backgroundFrame, currentFrame, compareWidth, compareHeight, colorNoiseTolerance, originaWidthModifier, originaHeightModifier);
+  const diff = diffMethod(currentFrame, previousFrame, videoFrameCanvas.width, noticeablyDiffers);
 
   if (comparisonImage === COMPARISON_IMAGE.PREVIOUS) {
-    backgroundFrame = currentFrame;
+    currentFrame = previousFrame;
   }
 
   context.fillStyle = rgbaColor;
-  context.clearRect(0, 0, videoWidth, videoHeight);
+  context.clearRect(0, 0, canvas.width, canvas.height);
 
   if (comparisonMode === COMPARISON_MODE.SINGLE_RECT) {
-    context.fillRect(diff.top, diff.left, diff.width, diff.height);
+    context.fillRect(diff.top * originaHeightModifier, diff.left * originaWidthModifier, diff.width * originaWidthModifier, diff.height * originaHeightModifier);
   } else {
     const { pixels } = diff;
 
     for (let index = 0; index < pixels.length; index = index + 2) {
-      context.fillRect(pixels[index], pixels[index + 1], originaWidthModifier, originaHeightModifier); // 10 should be quality
+      context.fillRect((pixels[index] * originaWidthModifier) - 0.5, (pixels[index + 1] * originaHeightModifier) - 0.5, originaWidthModifier, originaHeightModifier);
     }
   }
 
@@ -107,13 +103,12 @@ function setupVideo(newVideoElement, newVideoStream, newVideoHeight, newVideoWid
   videoStream = newVideoStream;
 
   setComparisonQuality(comparisonQuality2);
-
-  backgroundFrame = getVideoFrame();
+  setCurrentFrame();
   streamRecorder = getStreamRecorder(videoStream);
 }
 
 const core = {
-  setBackgroundFrame,
+  setCurrentFrame,
   setComparisonQuality,
   setupVideo,
   toggleRecording,

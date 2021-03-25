@@ -1,15 +1,10 @@
-/* eslint-disable max-len */
-// const redOffset = 0;
+import isPixelDifferent from './isPixelDifferent';
+
 const PIXEL = 4;
 
-// const RED = 0; // srsly?
-const BLUE = 2;
-const GREEN = 1;
-
-/* eslint-disable-next-line max-params */
-export default function getDifferenceRect(backgroundFrame, currentFrame, compareWidth, compareHeight, tolerance, originaWidthModifier, originaHeightModifier) {
+export default function getDifferenceRect(frame1, frame2, compareWidth, noticeablyDiffers) {
   const pixelRowSize = compareWidth * PIXEL;
-  const pixelCount = pixelRowSize * compareHeight;
+  const pixelCount = frame1.length;
 
   let topRow = Infinity;
 
@@ -20,10 +15,6 @@ export default function getDifferenceRect(backgroundFrame, currentFrame, compare
   let rightCol = 0;
 
   let isChanged = false;
-
-  function noticeablyDiffers(colorDiff) {
-    return (colorDiff > tolerance) || (colorDiff < -tolerance);
-  }
 
   function markChange(col, row) {
     if (col < leftCol) {
@@ -41,23 +32,17 @@ export default function getDifferenceRect(backgroundFrame, currentFrame, compare
   }
 
   for (let pixel = 0; pixel < pixelCount; pixel = pixel + PIXEL) {
-    if (
-      noticeablyDiffers(backgroundFrame[pixel] - currentFrame[pixel]) ||
-      noticeablyDiffers(backgroundFrame[pixel + GREEN] - currentFrame[pixel + GREEN]) ||
-      noticeablyDiffers(backgroundFrame[pixel + BLUE] - currentFrame[pixel + BLUE])
-    ) {
+    if (isPixelDifferent(frame1, frame2, pixel, noticeablyDiffers)) {
       isChanged = true;
       markChange((pixel % pixelRowSize) / PIXEL, Math.floor(pixel / pixelRowSize));
     }
   }
 
   return {
-    top: Math.floor(topRow * originaHeightModifier),
-    left: Math.floor(leftCol * originaWidthModifier),
-    bottom: Math.floor(bottomRow * originaHeightModifier),
-    right: Math.floor(rightCol * originaWidthModifier),
-    width: Math.floor((rightCol * originaWidthModifier) - (leftCol * originaWidthModifier)),
-    height: Math.floor((bottomRow * originaHeightModifier) - (topRow * originaHeightModifier)),
+    top: topRow,
+    left: leftCol,
+    width: rightCol - leftCol,
+    height: bottomRow - topRow,
     isChanged
   };
 }

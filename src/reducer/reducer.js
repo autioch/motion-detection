@@ -23,7 +23,7 @@ export function reducer(state, action) { // eslint-disable-line max-statements
     }
 
     case SET_BACKGROUND_FRAME: {
-      core.setBackgroundFrame();
+      core.setCurrentFrame();
 
       return state;
     }
