@@ -4,7 +4,6 @@ import { getDimensions } from '../utils';
 const { width, height } = getDimensions();
 
 export const initialState = {
-  videoStream: null,
   lastRender: Date.now(),
   currentRender: Date.now() + 1,
   recorderState: RECORD_MODE.WAITING,
@@ -20,6 +19,10 @@ export const initialState = {
     G: 255,
     B: 0
   },
+  videoElement: null,
+  videoStream: null,
+  videoCanvas: null,
+  videoContext: null,
   videoWidth: width,
   videoHeight: height
 };

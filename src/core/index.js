@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { download } from '../utils';
 import getStreamRecorder from './getStreamRecorder';
 import getDifferencePixel from './getDifferencePixel';
 import getDifferenceRect from './getDifferenceRect';
@@ -35,16 +34,6 @@ function getVideoFrame() {
   videoFrameContext.drawImage(videoElement, 0, 0, compareWidth, compareHeight);
 
   return videoFrameContext.getImageData(0, 0, compareWidth, compareHeight).data;
-}
-
-function takeScreenshot() {
-  getVideoFrame();
-
-  const serializedDate = new Date().toJSON();
-  const timestamp = serializedDate.replace('T', ' ').replace('Z', '');
-  const filename = `motion\\screenshot-${timestamp}.png`;
-
-  videoFrameCanvas.toBlob((blob) => download(blob, filename));
 }
 
 function setBackgroundFrame() {
@@ -124,7 +113,6 @@ function setupVideo(newVideoElement, newVideoStream, newVideoHeight, newVideoWid
 }
 
 const core = {
-  takeScreenshot,
   setBackgroundFrame,
   setComparisonQuality,
   setupVideo,

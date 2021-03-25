@@ -7,6 +7,7 @@ import {
   SETUP_VIDEO
 } from './actionTypes';
 import core from '../core';
+import { download } from '../utils';
 
 export function reducer(state, action) { // eslint-disable-line max-statements
   const { type, payload } = action; // eslint-disable-line no-unused-vars
@@ -36,7 +37,16 @@ export function reducer(state, action) { // eslint-disable-line max-statements
     }
 
     case TAKE_SCREENSHOT: {
-      core.takeScreenshot();
+      const { videoWidth, videoHeight, videoCanvas, videoElement, videoContext } = state;
+
+      const serializedDate = new Date().toJSON();
+      const timestamp = serializedDate.replace('T', ' ').replace('Z', '');
+      const filename = `motion\\screenshot-${timestamp}.png`;
+
+      videoContext.clearRect(0, 0, videoWidth, videoHeight);
+      videoContext.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
+
+      videoCanvas.toBlob((blob) => download(blob, filename));
 
       return state;
     }
@@ -50,12 +60,20 @@ export function reducer(state, action) { // eslint-disable-line max-statements
     case SETUP_VIDEO : {
       const { videoElement, videoStream } = payload;
       const { videoWidth, videoHeight, comparisonQuality } = state;
+      const videoCanvas = document.createElement('canvas');
+      const videoContext = videoCanvas.getContext('2d');
+
+      videoCanvas.width = videoWidth;
+      videoCanvas.height = videoHeight;
 
       core.setupVideo(videoElement, videoStream, videoHeight, videoWidth, comparisonQuality);
 
       return {
         ...state,
-        videoStream
+        videoElement,
+        videoStream,
+        videoCanvas,
+        videoContext
       };
     }
 

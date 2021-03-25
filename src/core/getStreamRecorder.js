@@ -1,5 +1,4 @@
-import download from './download';
-
+import { download } from '../utils';
 const MILISECOND = 1000;
 
 // https://www.npmjs.com/package/react-media-recorder
