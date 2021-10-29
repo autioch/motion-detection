@@ -1,0 +1,64 @@
+.app__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.app__content {
+  position: relative;
+}
+
+.c-sidebar-toggle {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+}
+
+.c-video {
+  display: block;
+}
+
+.c-overlay {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  bottom: 1em;
+  left: 1em;
+}
+
+.c-overlay__tr {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.c-overlay__br {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.c-overlay__text {
+  background: rgba(255, 255, 255, .5);
+  border-radius: 4px;
+  padding: 0 6px;
+  flex: auto;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+
+.c-motion {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
